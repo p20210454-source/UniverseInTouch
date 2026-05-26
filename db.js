@@ -141,7 +141,7 @@ async function initDatabase(db) {
   }
 
   const defaults = {
-    blogTitle: 'ResearchHub',
+    blogTitle: 'CosmoCause',
     tagline: 'Open Access Academic Repository',
     papersPerPage: '10',
     featuredPaperId: '',
@@ -155,6 +155,11 @@ async function initDatabase(db) {
       [key, value]
     );
   }
+
+  await run(
+    db,
+    `UPDATE settings SET value = 'CosmoCause' WHERE key = 'blogTitle' AND value = 'ResearchHub'`
+  );
 }
 
 module.exports = {

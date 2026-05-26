@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ResearchHub — Academic Paper Blog</title>
+<title>CosmoCause — Academic Paper Blog</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=JetBrains+Mono:wght@400;600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -725,7 +725,7 @@
 <!-- ADMIN SIDEBAR -->
 <div id="admin-sidebar">
   <div class="sidebar-logo">
-    <span>ResearchHub</span>
+    <span>CosmoCause</span>
     <span class="badge">Admin</span>
   </div>
   <div class="sidebar-section">
@@ -756,7 +756,7 @@
 <!-- TOPBAR -->
 <header id="topbar">
   <button id="admin-btn" onclick="openAdminPanel()">⚙ Admin</button>
-  <a href="#" class="topbar-brand" onclick="showPage('home'); return false;">Research<span>Hub</span></a>
+  <a href="#" class="topbar-brand" onclick="showPage('home'); return false;">Cosmo<span>Cause</span></a>
   <nav class="topbar-nav">
     <a href="#" onclick="browsePapers(); return false;">Browse</a>
     <a href="#" onclick="showPage('search-page'); return false;">Search</a>
@@ -863,8 +863,8 @@
   <!-- ABOUT PAGE -->
   <div id="about-page" class="page">
     <div style="max-width:720px;margin:0 auto;padding:48px 32px;">
-      <h1 style="font-family:'Playfair Display',serif;font-size:48px;font-weight:900;margin-bottom:20px;">About ResearchHub</h1>
-      <p style="font-size:18px;line-height:1.8;color:#4a4040;margin-bottom:20px;">ResearchHub is a curated open-access academic repository built on Blogger. It enables researchers, academics, and institutions to publish, discover, and cite peer-reviewed papers across all scientific disciplines.</p>
+      <h1 style="font-family:'Playfair Display',serif;font-size:48px;font-weight:900;margin-bottom:20px;">About CosmoCause</h1>
+      <p style="font-size:18px;line-height:1.8;color:#4a4040;margin-bottom:20px;">CosmoCause is a curated open-access academic repository built on Blogger. It enables researchers, academics, and institutions to publish, discover, and cite peer-reviewed papers across all scientific disciplines.</p>
       <p style="font-size:18px;line-height:1.8;color:#4a4040;margin-bottom:20px;">Our platform prioritizes open science, transparent peer review, and accessibility. Every paper includes full citation metadata, structured abstracts, keyword tagging, and DOI links.</p>
       <div class="paper-info-bar" style="margin-top:32px;">
         <div class="info-item"><div class="info-label">Founded</div><div class="info-val">2024</div></div>
@@ -880,7 +880,7 @@
     <div class="admin-header">
       <div class="admin-header-inner">
         <div>
-          <span class="admin-eyebrow">ResearchHub · Admin</span>
+          <span class="admin-eyebrow">CosmoCause · Admin</span>
           <h1>Dashboard</h1>
           <p id="dash-welcome">Repository overview — papers, views, and activity.</p>
         </div>
@@ -1144,24 +1144,24 @@
   <div id="install" class="page">
     <div style="max-width:900px;margin:0 auto;padding:48px 32px;">
       <h1 style="font-family:'Playfair Display',serif;font-size:40px;font-weight:900;margin-bottom:8px;">Install on Blogger</h1>
-      <p style="color:var(--muted);font-size:17px;margin-bottom:32px;">Paste this code into your Blogger theme to add the ResearchHub frontend to your blog.</p>
+      <p style="color:var(--muted);font-size:17px;margin-bottom:32px;">Paste this code into your Blogger theme to add the CosmoCause frontend to your blog.</p>
 
       <h2 class="section-heading">Step 1 — Go to Blogger Theme</h2>
       <p style="margin-bottom:16px;">In your Blogger dashboard, go to <strong>Theme → Edit HTML</strong>. Paste the code below just before the <code style="background:var(--ink);color:var(--paper);padding:2px 6px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:13px;">&lt;/body&gt;</code> tag.</p>
 
       <div class="install-box">
         <button class="install-copy-btn" onclick="copyInstall()">Copy</button>
-<span class="comment">&lt;!-- ResearchHub Widget — paste before &lt;/body&gt; --&gt;</span>
-<span class="tag">&lt;div</span> <span class="attr">id</span>=<span class="val">"researchhub-root"</span><span class="tag">&gt;&lt;/div&gt;</span>
+<span class="comment">&lt;!-- CosmoCause Widget — paste before &lt;/body&gt; --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">id</span>=<span class="val">"cosmocause-root"</span><span class="tag">&gt;&lt;/div&gt;</span>
 <span class="tag">&lt;script&gt;</span>
-  <span class="comment">// Replace with your deployed ResearchHub JSON feed URL</span>
-  var RH_DATA_URL = <span class="val">"https://your-researchhub.blogspot.com/feeds/posts/default?alt=json"</span>;
-  var RH_THEME = <span class="val">"dark"</span>; <span class="comment">// "dark" or "light"</span>
-  var RH_POSTS_PER_PAGE = 10;
-  var RH_SHOW_ABSTRACT = <span class="val">true</span>;
-  var RH_SHOW_CITATIONS = <span class="val">true</span>;
+  <span class="comment">// Replace with your deployed CosmoCause JSON feed URL</span>
+  var CC_DATA_URL = <span class="val">"https://your-cosmocause.blogspot.com/feeds/posts/default?alt=json"</span>;
+  var CC_THEME = <span class="val">"dark"</span>; <span class="comment">// "dark" or "light"</span>
+  var CC_POSTS_PER_PAGE = 10;
+  var CC_SHOW_ABSTRACT = <span class="val">true</span>;
+  var CC_SHOW_CITATIONS = <span class="val">true</span>;
 <span class="tag">&lt;/script&gt;</span>
-<span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="val">"https://cdn.jsdelivr.net/gh/yourgithub/researchhub@latest/researchhub.min.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="val">"https://cdn.jsdelivr.net/gh/p20210454-source/CosmoCause@latest/cosmocause.min.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
       </div>
 
       <h2 class="section-heading">Step 2 — Add the CSS</h2>
@@ -1171,14 +1171,14 @@
 <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="val">"stylesheet"</span>
       <span class="attr">href</span>=<span class="val">"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Crimson+Pro:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap"</span><span class="tag">/&gt;</span>
 <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="val">"stylesheet"</span>
-      <span class="attr">href</span>=<span class="val">"https://cdn.jsdelivr.net/gh/yourgithub/researchhub@latest/researchhub.min.css"</span><span class="tag">/&gt;</span>
+      <span class="attr">href</span>=<span class="val">"https://cdn.jsdelivr.net/gh/p20210454-source/CosmoCause@latest/cosmocause.min.css"</span><span class="tag">/&gt;</span>
       </div>
 
       <h2 class="section-heading">Step 3 — Configure Labels</h2>
-      <p style="margin-bottom:8px;">Use Blogger <strong>Labels</strong> as your paper categories. ResearchHub maps them automatically:</p>
+      <p style="margin-bottom:8px;">Use Blogger <strong>Labels</strong> as your paper categories. CosmoCause maps them automatically:</p>
       <div class="install-box">
-<span class="comment">// Blogger Label → ResearchHub Field mapping</span>
-var RH_LABEL_MAP = {
+<span class="comment">// Blogger Label → CosmoCause Field mapping</span>
+var CC_LABEL_MAP = {
   <span class="val">"cs"</span>: <span class="val">"Computer Science"</span>,
   <span class="val">"bio"</span>: <span class="val">"Biology"</span>,
   <span class="val">"phys"</span>: <span class="val">"Physics"</span>,
@@ -1188,7 +1188,7 @@ var RH_LABEL_MAP = {
       </div>
 
       <h2 class="section-heading">Step 4 — Post Format</h2>
-      <p style="margin-bottom:16px;">When writing a post in Blogger, structure it like this so ResearchHub parses it correctly:</p>
+      <p style="margin-bottom:16px;">When writing a post in Blogger, structure it like this so CosmoCause parses it correctly:</p>
       <div class="install-box">
 <span class="comment">&lt;!-- In your Blogger post HTML editor --&gt;</span>
 <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="val">"rh-paper"</span><span class="tag">&gt;</span>
@@ -1214,7 +1214,7 @@ var RH_LABEL_MAP = {
       <div class="admin-card" style="max-width:600px;">
         <div class="admin-card-head"><h3>Site Settings</h3></div>
         <div class="admin-card-body">
-          <div class="form-group"><label class="form-label">Blog Title</label><input class="form-input" id="set-blog-title" value="ResearchHub"></div>
+          <div class="form-group"><label class="form-label">Blog Title</label><input class="form-input" id="set-blog-title" value="CosmoCause"></div>
           <div class="form-group"><label class="form-label">Tagline</label><input class="form-input" id="set-tagline" value="Open Access Academic Repository"></div>
           <div class="form-group"><label class="form-label">Papers per page</label><input class="form-input" type="number" id="set-papers-per-page" value="10" min="1" max="50"></div>
           <div class="form-group"><label class="form-label">Featured Paper ID</label><input class="form-input" id="set-featured-id" placeholder="auto (latest)"></div>
@@ -1261,8 +1261,8 @@ var RH_LABEL_MAP = {
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-brand">Research<span style="color:var(--gold)">Hub</span></div>
-  <p>Open-access academic paper repository • Built for Blogger • <a href="#">Documentation</a> • <a href="#">GitHub</a></p>
+  <div class="footer-brand">Cosmo<span style="color:var(--gold)">Cause</span></div>
+  <p>Open-access academic paper repository • Built for Blogger • <a href="https://github.com/p20210454-source/CosmoCause" target="_blank" rel="noopener">GitHub</a></p>
   <p style="margin-top:8px;font-size:12px;">CC BY 4.0 — Free to use, share, and adapt with attribution</p>
 </footer>
 
@@ -1432,7 +1432,35 @@ async function fetchStats() {
   return data;
 }
 
+function normalizeSiteName(name) {
+  var n = String(name || '').trim();
+  if (!n || n === 'ResearchHub') return 'CosmoCause';
+  return n;
+}
+
+function applyBrandToUI(name) {
+  var title = normalizeSiteName(name);
+  document.title = title + ' — Academic Paper Blog';
+  var brand = document.querySelector('.topbar-brand');
+  if (brand) {
+    if (title === 'CosmoCause') {
+      brand.innerHTML = 'Cosmo<span>Cause</span>';
+    } else {
+      brand.textContent = title;
+    }
+  }
+  var sidebarName = document.querySelector('.sidebar-logo span:first-child');
+  if (sidebarName) sidebarName.textContent = title;
+  var footerBrand = document.querySelector('.footer-brand');
+  if (footerBrand && title === 'CosmoCause') {
+    footerBrand.innerHTML = 'Cosmo<span style="color:var(--gold)">Cause</span>';
+  }
+}
+
 function applySettingsToUI() {
+  if (siteSettings.blogTitle) {
+    siteSettings.blogTitle = normalizeSiteName(siteSettings.blogTitle);
+  }
   var map = {
     'set-blog-title': 'blogTitle',
     'set-tagline': 'tagline',
@@ -1447,6 +1475,7 @@ function applySettingsToUI() {
   });
   var tag = document.querySelector('.hero-tag');
   if (tag && siteSettings.tagline) tag.textContent = siteSettings.tagline;
+  applyBrandToUI(siteSettings.blogTitle || 'CosmoCause');
   if (siteSettings.papersPerPage) {
     visibleCount = Math.min(parseInt(siteSettings.papersPerPage, 10) || 5, 50);
   }
@@ -2288,6 +2317,7 @@ document.getElementById('admin-logout-btn').addEventListener('click', function (
   e.preventDefault();
   adminLogout();
 });
+applyBrandToUI('CosmoCause');
 checkAuth().then(function () {
   applyHashRoute();
 });

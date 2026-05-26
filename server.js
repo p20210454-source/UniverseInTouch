@@ -89,12 +89,25 @@ const slugify = (name) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '') || 'category';
 
+const LEGACY_SITE_NAME = 'ResearchHub';
+const SITE_NAME = 'CosmoCause';
+
+function normalizeBlogTitle(value) {
+  const title = String(value || '').trim();
+  if (!title || title === LEGACY_SITE_NAME) return SITE_NAME;
+  return title;
+}
+
 async function loadSettingsMap() {
   const rows = await all(db, 'SELECT key, value FROM settings');
   const settings = {};
   rows.forEach((r) => {
     settings[r.key] = r.value;
   });
+  if (settings.blogTitle === LEGACY_SITE_NAME) {
+    settings.blogTitle = SITE_NAME;
+    await run(db, 'UPDATE settings SET value = ? WHERE key = ?', [SITE_NAME, 'blogTitle']);
+  }
   return settings;
 }
 
@@ -205,7 +218,7 @@ app.use(express.json({ limit: '512kb' }));
 app.get('/api/health', (req, res) => {
   res.json({
     ok: true,
-    service: 'researchub',
+    service: 'cosmocause',
     version: '1.0.0',
     features: { adminDashboard: true },
   });
@@ -887,7 +900,7 @@ app.use('/api', (req, res) => {
   res.status(404).json({
     error: 'API route not found',
     path: req.originalUrl,
-    hint: 'Restart the server from the researchub folder if admin routes are missing.',
+    hint: 'Restart the server from the CosmoCause project folder if admin routes are missing.',
   });
 });
 
@@ -905,7 +918,7 @@ initDatabase(db)
       console.warn('WARNING: Set ADMIN_PASSWORD in production.');
     }
     app.listen(port, () => {
-      console.log(`ResearchHub backend running at http://localhost:${port}`);
+      console.log(`CosmoCause backend running at http://localhost:${port}`);
       console.log(`Admin login: username "${ADMIN_USERNAME}" (ADMIN_USERNAME / ADMIN_PASSWORD env)`);
     });
   })

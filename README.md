@@ -1,6 +1,6 @@
 # CosmoCause
 
-ResearchHub — academic paper blog with Express + SQLite backend.
+CosmoCause — academic paper blog with Express + SQLite backend.
 
 ## Run
 
