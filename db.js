@@ -141,7 +141,7 @@ async function initDatabase(db) {
   }
 
   const defaults = {
-    blogTitle: 'CosmoCause',
+    blogTitle: 'UniverseInTouch',
     tagline: 'Open Access Academic Repository',
     papersPerPage: '10',
     featuredPaperId: '',
@@ -158,7 +158,7 @@ async function initDatabase(db) {
 
   await run(
     db,
-    `UPDATE settings SET value = 'CosmoCause' WHERE key = 'blogTitle' AND value = 'ResearchHub'`
+    `UPDATE settings SET value = 'UniverseInTouch' WHERE key = 'blogTitle' AND value IN ('ResearchHub', 'CosmoCause')`
   );
 }
 

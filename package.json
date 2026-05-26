@@ -1,5 +1,5 @@
 {
-  "name": "cosmocause",
+  "name": "universeintouch",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -11,6 +11,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "overrides": {
+    "tar": "^6.2.1"
+  },
   "dependencies": {
     "cors": "^2.8.6",
     "dompurify": "^3.1.2",

@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CosmoCause — Academic Paper Blog</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=JetBrains+Mono:wght@400;600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<title>UniverseInTouch &mdash; Academic Paper Blog</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/theme-researchgate.css">
 <style>
   :root {
     --ink: #0d0d0d;
@@ -725,47 +726,47 @@
 <!-- ADMIN SIDEBAR -->
 <div id="admin-sidebar">
   <div class="sidebar-logo">
-    <span>CosmoCause</span>
+    <span>UniverseInTouch</span>
     <span class="badge">Admin</span>
   </div>
   <div class="sidebar-section">
     <div class="sidebar-label">Navigation</div>
     <nav class="sidebar-nav" id="sidebar-nav">
-      <a href="#" data-page="admin-page" class="sidebar-link active"><span class="icon">📊</span> Dashboard</a>
-      <a href="#" data-page="home" class="sidebar-link"><span class="icon">🏠</span> View Site</a>
-      <a href="#" data-page="add-paper" class="sidebar-link"><span class="icon">✍️</span> Add Paper</a>
-      <a href="#" data-page="manage" class="sidebar-link"><span class="icon">📋</span> Manage Papers</a>
-      <a href="#" data-page="categories" class="sidebar-link"><span class="icon">🏷️</span> Categories</a>
-      <a href="#" data-page="analytics" class="sidebar-link"><span class="icon">📊</span> Analytics</a>
-      <a href="#" data-page="install" class="sidebar-link"><span class="icon">🔧</span> Blogger Install</a>
-      <a href="#" data-page="settings" class="sidebar-link"><span class="icon">⚙️</span> Settings</a>
-      <a href="#" id="admin-logout-btn" class="sidebar-link" style="display:none;margin-top:12px"><span class="icon">🚪</span> Sign out</a>
+      <a href="#" data-page="admin-page" class="sidebar-link active"><span class="icon" aria-hidden="true">D</span> Dashboard</a>
+      <a href="#" data-page="home" class="sidebar-link"><span class="icon" aria-hidden="true">V</span> View Site</a>
+      <a href="#" data-page="add-paper" class="sidebar-link"><span class="icon" aria-hidden="true">+</span> Add Paper</a>
+      <a href="#" data-page="manage" class="sidebar-link"><span class="icon" aria-hidden="true">M</span> Manage Papers</a>
+      <a href="#" data-page="categories" class="sidebar-link"><span class="icon" aria-hidden="true">C</span> Categories</a>
+      <a href="#" data-page="analytics" class="sidebar-link"><span class="icon" aria-hidden="true">A</span> Analytics</a>
+      <a href="#" data-page="install" class="sidebar-link"><span class="icon" aria-hidden="true">B</span> Blogger Install</a>
+      <a href="#" data-page="settings" class="sidebar-link"><span class="icon" aria-hidden="true">S</span> Settings</a>
+      <a href="#" id="admin-logout-btn" class="sidebar-link" style="display:none;margin-top:12px"><span class="icon" aria-hidden="true">&rarr;</span> Sign out</a>
     </nav>
   </div>
   <div class="sidebar-section" style="margin-top:auto;">
     <div class="sidebar-stats">
-      <div class="stat-row"><span class="stat-label">Published</span><span class="stat-val" id="stat-total">—</span></div>
-      <div class="stat-row"><span class="stat-label">This Month</span><span class="stat-val" id="sidebar-month">—</span></div>
-      <div class="stat-row"><span class="stat-label">Total Views</span><span class="stat-val" id="sidebar-views">—</span></div>
-      <div class="stat-row"><span class="stat-label">Citations</span><span class="stat-val" id="sidebar-citations">—</span></div>
+      <div class="stat-row"><span class="stat-label">Published</span><span class="stat-val" id="stat-total">&mdash;</span></div>
+      <div class="stat-row"><span class="stat-label">This Month</span><span class="stat-val" id="sidebar-month">&mdash;</span></div>
+      <div class="stat-row"><span class="stat-label">Total Views</span><span class="stat-val" id="sidebar-views">&mdash;</span></div>
+      <div class="stat-row"><span class="stat-label">Citations</span><span class="stat-val" id="sidebar-citations">&mdash;</span></div>
     </div>
   </div>
 </div>
-<div id="overlay" onclick="closeSidebar()"></div>
+<div id="overlay" data-action="close-sidebar" role="button" tabindex="0" aria-label="Close menu"></div>
 
 <!-- TOPBAR -->
 <header id="topbar">
-  <button id="admin-btn" onclick="openAdminPanel()">⚙ Admin</button>
-  <a href="#" class="topbar-brand" onclick="showPage('home'); return false;">Cosmo<span>Cause</span></a>
+  <button id="admin-btn" data-action="open-admin">Admin</button>
+  <a href="#" class="topbar-brand" data-action="show-page" data-page="home">Universe<span>InTouch</span></a>
   <nav class="topbar-nav">
-    <a href="#" onclick="browsePapers(); return false;">Browse</a>
-    <a href="#" onclick="showPage('search-page'); return false;">Search</a>
-    <a href="#" onclick="showPage('about-page'); return false;">About</a>
-    <a href="#" onclick="showPage('install'); return false;">Install</a>
+    <a href="#" data-action="browse-papers">Browse</a>
+    <a href="#" data-action="show-page" data-page="search-page">Search</a>
+    <a href="#" data-action="show-page" data-page="about-page">About</a>
+    <a href="#" data-action="show-page" data-page="install">Install</a>
   </nav>
   <div class="topbar-search">
-    <span>🔍</span>
-    <input type="text" placeholder="Search papers..." id="quick-search" oninput="quickSearch(this.value)">
+    <span class="search-glyph" aria-hidden="true"></span>
+    <input type="text" placeholder="Search papers..." id="quick-search">
   </div>
 </header>
 
@@ -775,49 +776,49 @@
   <!-- HOME PAGE -->
   <div id="home" class="page active">
     <div class="hero">
-      <span class="hero-tag">Open Access Academic Repository</span>
-      <h1>Discover <em>Groundbreaking</em><br>Research Papers</h1>
-      <p>Curated peer-reviewed publications across AI, Biology, Physics, Economics, and Mathematics.</p>
+      <span class="hero-tag">Academic research network</span>
+      <h1>Discover &amp; share <em>research</em></h1>
+      <p>Find publications, track citations, and connect with work in mathematics and related fields — similar to how researchers use professional discovery platforms.</p>
       <div class="hero-actions">
-        <a href="#" class="btn-primary" id="browse-papers-btn" onclick="browsePapers(); return false;">Browse Papers</a>
-        <a href="#" class="btn-outline" onclick="showPage('add-paper'); return false;">Submit Research</a>
+        <a href="#" class="btn-primary" id="browse-papers-btn" data-action="browse-papers">Browse publications</a>
+        <a href="#" class="btn-outline" data-action="show-page" data-page="add-paper">Add publication</a>
       </div>
     </div>
     <div class="filter-bar">
       <span class="filter-label">Field:</span>
-      <button class="filter-btn active" onclick="filterPapers('math', this)">Mathematics</button>
+      <button type="button" class="filter-btn active" data-action="filter-papers" data-field="math">Mathematics</button>
     </div>
     <div class="content-wrap">
       <div>
         <div id="featured-section"></div>
         <div class="papers-grid" id="papers-grid"></div>
         <div style="text-align:center;margin-top:32px;">
-          <button class="btn-primary" id="load-more-btn" onclick="loadMore()">Load More Papers</button>
+          <button type="button" class="btn-primary" id="load-more-btn" data-action="load-more">Load More Papers</button>
         </div>
       </div>
       <aside class="sidebar-right">
         <div class="widget-card">
-          <div class="widget-head"><h3>📈 Trending This Week</h3></div>
+          <div class="widget-head"><h3>Trending this week</h3></div>
           <div class="widget-body" id="trending-widget"></div>
         </div>
         <div class="widget-card">
-          <div class="widget-head"><h3>🏷️ Popular Tags</h3></div>
+          <div class="widget-head"><h3>Popular topics</h3></div>
           <div class="widget-body">
             <div class="tag-cloud" id="tag-cloud"></div>
           </div>
         </div>
         <div class="widget-card">
-          <div class="widget-head"><h3>📧 Research Digest</h3></div>
-          <div class="widget-body">
-            <p style="font-size:14px;color:var(--muted);margin-bottom:14px;">Get weekly paper recommendations in your field.</p>
+          <div class="widget-head"><h3>Stay updated</h3></div>
+            <div class="widget-body">
+            <p style="font-size:14px;color:var(--muted);margin-bottom:14px;">Get weekly recommendations for new publications in your field.</p>
             <div class="newsletter-form">
               <input type="email" id="newsletter-email" placeholder="your@email.edu">
-              <button type="button" onclick="subscribeNewsletter()">Subscribe Free</button>
+              <button type="button" data-action="subscribe">Subscribe Free</button>
             </div>
           </div>
         </div>
         <div class="widget-card">
-          <div class="widget-head"><h3>📊 Repository Stats</h3></div>
+          <div class="widget-head"><h3>Repository Stats</h3></div>
           <div class="widget-body">
             <div class="activity-feed">
               <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--border)">
@@ -826,15 +827,15 @@
               </div>
               <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--border)">
                 <span style="font-size:14px;color:var(--muted)">Open Access</span>
-                <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#27ae60;font-weight:600" id="sidebar-open-pct">—</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#27ae60;font-weight:600" id="sidebar-open-pct">&mdash;</span>
               </div>
               <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--border)">
                 <span style="font-size:14px;color:var(--muted)">Peer Reviewed</span>
-                <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#2980b9;font-weight:600" id="sidebar-peer-pct">—</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#2980b9;font-weight:600" id="sidebar-peer-pct">&mdash;</span>
               </div>
               <div style="display:flex;justify-content:space-between;padding:8px 0">
                 <span style="font-size:14px;color:var(--muted)">Avg Citations</span>
-                <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--gold);font-weight:600" id="sidebar-avg-citations">—</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--gold);font-weight:600" id="sidebar-avg-citations">&mdash;</span>
               </div>
             </div>
           </div>
@@ -851,10 +852,11 @@
   <!-- SEARCH PAGE -->
   <div id="search-page" class="page">
     <div class="search-page">
-      <h2 style="font-family:'Playfair Display',serif;font-size:32px;font-weight:900;margin-bottom:24px;">Search Papers</h2>
+      <h1 class="page-title">Search publications</h1>
+      <p class="page-sub">Search by title, author, abstract, or keyword</p>
       <div class="search-big">
         <input type="text" id="main-search" placeholder="Search by title, author, abstract, keyword...">
-        <button onclick="performSearch()">Search</button>
+        <button type="button" data-action="perform-search">Search</button>
       </div>
       <div id="search-results" class="papers-grid"></div>
     </div>
@@ -862,10 +864,10 @@
 
   <!-- ABOUT PAGE -->
   <div id="about-page" class="page">
-    <div style="max-width:720px;margin:0 auto;padding:48px 32px;">
-      <h1 style="font-family:'Playfair Display',serif;font-size:48px;font-weight:900;margin-bottom:20px;">About CosmoCause</h1>
-      <p style="font-size:18px;line-height:1.8;color:#4a4040;margin-bottom:20px;">CosmoCause is a curated open-access academic repository built on Blogger. It enables researchers, academics, and institutions to publish, discover, and cite peer-reviewed papers across all scientific disciplines.</p>
-      <p style="font-size:18px;line-height:1.8;color:#4a4040;margin-bottom:20px;">Our platform prioritizes open science, transparent peer review, and accessibility. Every paper includes full citation metadata, structured abstracts, keyword tagging, and DOI links.</p>
+    <div class="about-content">
+      <h1>About UniverseInTouch</h1>
+      <p>UniverseInTouch helps researchers <strong>discover</strong>, <strong>share</strong>, and <strong>cite</strong> academic work — with a clean, professional layout inspired by modern research networks.</p>
+      <p>Upload publications with structured metadata (authors, abstract, DOI, references), browse by field, and track reads and citations. Built for open access and easy integration with Blogger.</p>
       <div class="paper-info-bar" style="margin-top:32px;">
         <div class="info-item"><div class="info-label">Founded</div><div class="info-val">2024</div></div>
         <div class="info-item"><div class="info-label">Papers</div><div class="info-val">12+</div></div>
@@ -880,61 +882,61 @@
     <div class="admin-header">
       <div class="admin-header-inner">
         <div>
-          <span class="admin-eyebrow">CosmoCause · Admin</span>
+          <span class="admin-eyebrow">UniverseInTouch &middot; Admin</span>
           <h1>Dashboard</h1>
-          <p id="dash-welcome">Repository overview — papers, views, and activity.</p>
+          <p id="dash-welcome">Repository overview &mdash; papers, views, and activity.</p>
         </div>
         <div class="admin-header-actions">
-          <button type="button" class="submit-btn" onclick="showPage('add-paper')">+ New Paper</button>
-          <button type="button" class="submit-btn secondary" onclick="browsePapers()">View Live Site</button>
+          <button type="button" class="submit-btn" data-action="show-page" data-page="add-paper">+ New Paper</button>
+          <button type="button" class="submit-btn secondary" data-action="browse-papers">View Live Site</button>
         </div>
       </div>
     </div>
     <div class="admin-body">
       <div class="dash-quick-actions">
-        <button type="button" class="dash-quick-btn primary" onclick="showPage('add-paper')">✍️ Publish Paper</button>
-        <button type="button" class="dash-quick-btn" onclick="showPage('manage')">📋 Manage Papers</button>
-        <button type="button" class="dash-quick-btn" onclick="showPage('categories')">🏷️ Categories</button>
-        <button type="button" class="dash-quick-btn" onclick="showPage('analytics')">📈 Analytics</button>
-        <button type="button" class="dash-quick-btn" onclick="showPage('settings')">⚙️ Settings</button>
+        <button type="button" class="dash-quick-btn primary" data-action="show-page" data-page="add-paper">Publish Paper</button>
+        <button type="button" class="dash-quick-btn" data-action="show-page" data-page="manage">Manage Papers</button>
+        <button type="button" class="dash-quick-btn" data-action="show-page" data-page="categories">Categories</button>
+        <button type="button" class="dash-quick-btn" data-action="show-page" data-page="analytics">Analytics</button>
+        <button type="button" class="dash-quick-btn" data-action="show-page" data-page="settings">Settings</button>
       </div>
 
       <div class="admin-metrics">
         <div class="metric-card accent-metric">
-          <div class="metric-icon">📚</div>
+          <div class="metric-icon" aria-hidden="true">P</div>
           <div class="metric-label">Published</div>
-          <div class="metric-val" id="m-total">—</div>
+          <div class="metric-val" id="m-total">&mdash;</div>
           <div class="metric-change" id="m-total-sub">Live on site</div>
         </div>
         <div class="metric-card">
-          <div class="metric-icon">📝</div>
+          <div class="metric-icon" aria-hidden="true">D</div>
           <div class="metric-label">Drafts</div>
-          <div class="metric-val" id="m-drafts">—</div>
+          <div class="metric-val" id="m-drafts">&mdash;</div>
           <div class="metric-change" id="m-drafts-sub">Awaiting publish</div>
         </div>
         <div class="metric-card">
-          <div class="metric-icon">👁️</div>
+          <div class="metric-icon" aria-hidden="true">V</div>
           <div class="metric-label">Total Views</div>
-          <div class="metric-val" id="m-views">—</div>
+          <div class="metric-val" id="m-views">&mdash;</div>
           <div class="metric-change">All published papers</div>
         </div>
         <div class="metric-card">
-          <div class="metric-icon">🔗</div>
+          <div class="metric-icon" aria-hidden="true">C</div>
           <div class="metric-label">Citations</div>
-          <div class="metric-val" id="m-citations">—</div>
-          <div class="metric-change" id="m-avg-cite">Avg —</div>
+          <div class="metric-val" id="m-citations">&mdash;</div>
+          <div class="metric-change" id="m-avg-cite">Avg &mdash;</div>
         </div>
         <div class="metric-card">
-          <div class="metric-icon">🌐</div>
+          <div class="metric-icon" aria-hidden="true">O</div>
           <div class="metric-label">Open Access</div>
-          <div class="metric-val" id="m-open-pct">—</div>
-          <div class="metric-change" id="m-peer-pct">Peer —</div>
+          <div class="metric-val" id="m-open-pct">&mdash;</div>
+          <div class="metric-change" id="m-peer-pct">Peer &mdash;</div>
         </div>
         <div class="metric-card">
-          <div class="metric-icon">📧</div>
+          <div class="metric-icon" aria-hidden="true">S</div>
           <div class="metric-label">Subscribers</div>
-          <div class="metric-val" id="m-subscribers">—</div>
-          <div class="metric-change" id="m-categories">— categories</div>
+          <div class="metric-val" id="m-subscribers">&mdash;</div>
+          <div class="metric-change" id="m-categories">&mdash; categories</div>
         </div>
       </div>
 
@@ -949,7 +951,7 @@
           <div class="admin-card">
             <div class="admin-card-head">
               <h3>Featured Paper</h3>
-              <button type="button" class="action-btn" onclick="showPage('settings')">Edit</button>
+              <button type="button" class="action-btn" data-action="show-page" data-page="settings">Edit</button>
             </div>
             <div class="admin-card-body" id="dash-featured">
               <div class="dash-empty">No featured paper set.</div>
@@ -960,7 +962,7 @@
               <h3>Top Performing</h3>
             </div>
             <div class="admin-card-body" id="dash-top-paper">
-              <div class="dash-empty">—</div>
+              <div class="dash-empty">&mdash;</div>
             </div>
           </div>
         </div>
@@ -968,7 +970,7 @@
           <div class="admin-card">
             <div class="admin-card-head">
               <h3>Recent Papers</h3>
-              <button type="button" class="action-btn" onclick="showPage('manage')">View All</button>
+              <button type="button" class="action-btn" data-action="show-page" data-page="manage">View All</button>
             </div>
             <div class="admin-card-body" style="padding:0;overflow-x:auto;">
               <table class="papers-table" id="admin-recent-table"></table>
@@ -1070,13 +1072,13 @@
             <label class="form-label">Featured Paper?</label>
             <select class="form-select" id="f-featured">
               <option value="no">No</option>
-              <option value="yes">Yes — Show as Featured</option>
+              <option value="yes">Yes &mdash; Show as Featured</option>
             </select>
           </div>
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;">
-            <button class="submit-btn" onclick="addPaper()">Publish Paper</button>
-            <button class="submit-btn secondary" onclick="saveDraft()">Save Draft</button>
-            <button class="submit-btn secondary" onclick="clearForm()">Clear</button>
+            <button type="button" class="submit-btn" data-action="add-paper">Publish Paper</button>
+            <button type="button" class="submit-btn secondary" data-action="save-draft">Save Draft</button>
+            <button type="button" class="submit-btn secondary" data-action="clear-form">Clear</button>
           </div>
         </div>
       </div>
@@ -1093,7 +1095,7 @@
       <div class="admin-card">
         <div class="admin-card-head">
           <h3>All Papers (<span id="manage-count">0</span>)</h3>
-          <button class="submit-btn" style="padding:7px 16px;font-size:11px;" onclick="showPage('add-paper')">+ Add New</button>
+          <button type="button" class="submit-btn" style="padding:7px 16px;font-size:11px;" data-action="show-page" data-page="add-paper">+ Add New</button>
         </div>
         <div style="overflow-x:auto;">
           <table class="papers-table" id="manage-table" style="min-width:700px;"></table>
@@ -1112,7 +1114,7 @@
           <div class="admin-card-body">
             <div class="form-group"><label class="form-label">Category Name</label><input class="form-input" id="cat-name" placeholder="e.g. Neuroscience"></div>
             <div class="form-group"><label class="form-label">Color Code</label><input class="form-input" id="cat-color" type="color" value="#c0392b"></div>
-            <button class="submit-btn" onclick="addCategory()">Add Category</button>
+            <button type="button" class="submit-btn" data-action="add-category">Add Category</button>
           </div>
         </div>
         <div class="admin-card">
@@ -1128,10 +1130,10 @@
     <div class="admin-header"><h1>Analytics</h1><p>Track paper views, downloads, and citations.</p></div>
     <div class="admin-body">
       <div class="admin-metrics">
-        <div class="metric-card"><div class="metric-label">Total Views</div><div class="metric-val" id="a-total-views">—</div><div class="metric-change">All papers</div></div>
-        <div class="metric-card"><div class="metric-label">Total Citations</div><div class="metric-val" id="a-total-citations">—</div><div class="metric-change">All papers</div></div>
-        <div class="metric-card"><div class="metric-label">Top Paper Views</div><div class="metric-val" id="a-top-views">—</div><div class="metric-change" id="a-top-title">—</div></div>
-        <div class="metric-card"><div class="metric-label">Subscribers</div><div class="metric-val" id="a-subscribers">—</div><div class="metric-change">Newsletter</div></div>
+        <div class="metric-card"><div class="metric-label">Total Views</div><div class="metric-val" id="a-total-views">&mdash;</div><div class="metric-change">All papers</div></div>
+        <div class="metric-card"><div class="metric-label">Total Citations</div><div class="metric-val" id="a-total-citations">&mdash;</div><div class="metric-change">All papers</div></div>
+        <div class="metric-card"><div class="metric-label">Top Paper Views</div><div class="metric-val" id="a-top-views">&mdash;</div><div class="metric-change" id="a-top-title">&mdash;</div></div>
+        <div class="metric-card"><div class="metric-label">Subscribers</div><div class="metric-val" id="a-subscribers">&mdash;</div><div class="metric-change">Newsletter</div></div>
       </div>
       <div class="admin-card" style="max-width:700px;">
         <div class="admin-card-head"><h3>Views by Field</h3></div>
@@ -1144,40 +1146,40 @@
   <div id="install" class="page">
     <div style="max-width:900px;margin:0 auto;padding:48px 32px;">
       <h1 style="font-family:'Playfair Display',serif;font-size:40px;font-weight:900;margin-bottom:8px;">Install on Blogger</h1>
-      <p style="color:var(--muted);font-size:17px;margin-bottom:32px;">Paste this code into your Blogger theme to add the CosmoCause frontend to your blog.</p>
+      <p style="color:var(--muted);font-size:17px;margin-bottom:32px;">Paste this code into your Blogger theme to add the UniverseInTouch frontend to your blog.</p>
 
-      <h2 class="section-heading">Step 1 — Go to Blogger Theme</h2>
-      <p style="margin-bottom:16px;">In your Blogger dashboard, go to <strong>Theme → Edit HTML</strong>. Paste the code below just before the <code style="background:var(--ink);color:var(--paper);padding:2px 6px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:13px;">&lt;/body&gt;</code> tag.</p>
+      <h2 class="section-heading">Step 1 &mdash; Go to Blogger Theme</h2>
+      <p style="margin-bottom:16px;">In your Blogger dashboard, go to <strong>Theme â†’ Edit HTML</strong>. Paste the code below just before the <code style="background:var(--ink);color:var(--paper);padding:2px 6px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:13px;">&lt;/body&gt;</code> tag.</p>
 
       <div class="install-box">
-        <button class="install-copy-btn" onclick="copyInstall()">Copy</button>
-<span class="comment">&lt;!-- CosmoCause Widget — paste before &lt;/body&gt; --&gt;</span>
-<span class="tag">&lt;div</span> <span class="attr">id</span>=<span class="val">"cosmocause-root"</span><span class="tag">&gt;&lt;/div&gt;</span>
+        <button type="button" class="install-copy-btn" data-action="copy-install">Copy</button>
+<span class="comment">&lt;!-- UniverseInTouch Widget &mdash; paste before &lt;/body&gt; --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">id</span>=<span class="val">"universeintouch-root"</span><span class="tag">&gt;&lt;/div&gt;</span>
 <span class="tag">&lt;script&gt;</span>
-  <span class="comment">// Replace with your deployed CosmoCause JSON feed URL</span>
-  var CC_DATA_URL = <span class="val">"https://your-cosmocause.blogspot.com/feeds/posts/default?alt=json"</span>;
+  <span class="comment">// Replace with your deployed UniverseInTouch JSON feed URL</span>
+  var UIT_DATA_URL = <span class="val">"https://your-universeintouch.blogspot.com/feeds/posts/default?alt=json"</span>;
   var CC_THEME = <span class="val">"dark"</span>; <span class="comment">// "dark" or "light"</span>
   var CC_POSTS_PER_PAGE = 10;
   var CC_SHOW_ABSTRACT = <span class="val">true</span>;
   var CC_SHOW_CITATIONS = <span class="val">true</span>;
 <span class="tag">&lt;/script&gt;</span>
-<span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="val">"https://cdn.jsdelivr.net/gh/p20210454-source/CosmoCause@latest/cosmocause.min.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="val">"https://cdn.jsdelivr.net/gh/p20210454-source/UniverseInTouch@latest/universeintouch.min.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
       </div>
 
-      <h2 class="section-heading">Step 2 — Add the CSS</h2>
+      <h2 class="section-heading">Step 2 &mdash; Add the CSS</h2>
       <p style="margin-bottom:16px;">Paste this inside the <code style="background:var(--ink);color:var(--paper);padding:2px 6px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:13px;">&lt;head&gt;</code> section of your Blogger theme.</p>
       <div class="install-box">
-        <button class="install-copy-btn" onclick="copyCSS()">Copy</button>
+        <button type="button" class="install-copy-btn" data-action="copy-css">Copy</button>
 <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="val">"stylesheet"</span>
       <span class="attr">href</span>=<span class="val">"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Crimson+Pro:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap"</span><span class="tag">/&gt;</span>
 <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="val">"stylesheet"</span>
-      <span class="attr">href</span>=<span class="val">"https://cdn.jsdelivr.net/gh/p20210454-source/CosmoCause@latest/cosmocause.min.css"</span><span class="tag">/&gt;</span>
+      <span class="attr">href</span>=<span class="val">"https://cdn.jsdelivr.net/gh/p20210454-source/UniverseInTouch@latest/universeintouch.min.css"</span><span class="tag">/&gt;</span>
       </div>
 
-      <h2 class="section-heading">Step 3 — Configure Labels</h2>
-      <p style="margin-bottom:8px;">Use Blogger <strong>Labels</strong> as your paper categories. CosmoCause maps them automatically:</p>
+      <h2 class="section-heading">Step 3 &mdash; Configure Labels</h2>
+      <p style="margin-bottom:8px;">Use Blogger <strong>Labels</strong> as your paper categories. UniverseInTouch maps them automatically:</p>
       <div class="install-box">
-<span class="comment">// Blogger Label → CosmoCause Field mapping</span>
+<span class="comment">// Blogger Label â†’ UniverseInTouch Field mapping</span>
 var CC_LABEL_MAP = {
   <span class="val">"cs"</span>: <span class="val">"Computer Science"</span>,
   <span class="val">"bio"</span>: <span class="val">"Biology"</span>,
@@ -1187,8 +1189,8 @@ var CC_LABEL_MAP = {
 };
       </div>
 
-      <h2 class="section-heading">Step 4 — Post Format</h2>
-      <p style="margin-bottom:16px;">When writing a post in Blogger, structure it like this so CosmoCause parses it correctly:</p>
+      <h2 class="section-heading">Step 4 &mdash; Post Format</h2>
+      <p style="margin-bottom:16px;">When writing a post in Blogger, structure it like this so UniverseInTouch parses it correctly:</p>
       <div class="install-box">
 <span class="comment">&lt;!-- In your Blogger post HTML editor --&gt;</span>
 <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="val">"rh-paper"</span><span class="tag">&gt;</span>
@@ -1202,7 +1204,7 @@ var CC_LABEL_MAP = {
 <span class="tag">&lt;/div&gt;</span>
       </div>
       <div style="background:#d5f5e3;border:1px solid #a9dfbf;border-radius:6px;padding:16px 20px;margin-top:16px;">
-        <strong style="color:#1e8449;">✓ That's it!</strong> Your Blogger blog will now display as a professional research paper repository. The admin dashboard above is included — access it by appending <code style="font-family:'JetBrains Mono',monospace;font-size:13px;">#admin</code> to your blog URL.
+        <strong style="color:#1e8449;">Done!</strong> Your Blogger blog will now display as a professional research paper repository. The admin dashboard above is included &mdash; access it by appending <code style="font-family:'JetBrains Mono',monospace;font-size:13px;">#admin</code> to your blog URL.
       </div>
     </div>
   </div>
@@ -1214,7 +1216,7 @@ var CC_LABEL_MAP = {
       <div class="admin-card" style="max-width:600px;">
         <div class="admin-card-head"><h3>Site Settings</h3></div>
         <div class="admin-card-body">
-          <div class="form-group"><label class="form-label">Blog Title</label><input class="form-input" id="set-blog-title" value="CosmoCause"></div>
+          <div class="form-group"><label class="form-label">Blog Title</label><input class="form-input" id="set-blog-title" value="UniverseInTouch"></div>
           <div class="form-group"><label class="form-label">Tagline</label><input class="form-input" id="set-tagline" value="Open Access Academic Repository"></div>
           <div class="form-group"><label class="form-label">Papers per page</label><input class="form-input" type="number" id="set-papers-per-page" value="10" min="1" max="50"></div>
           <div class="form-group"><label class="form-label">Featured Paper ID</label><input class="form-input" id="set-featured-id" placeholder="auto (latest)"></div>
@@ -1226,7 +1228,7 @@ var CC_LABEL_MAP = {
               <option value="clean-white">Clean White</option>
             </select>
           </div>
-          <button class="submit-btn" type="button" onclick="saveSettings()">Save Settings</button>
+          <button class="submit-btn" type="button" data-action="save-settings">Save Settings</button>
         </div>
       </div>
     </div>
@@ -1250,7 +1252,7 @@ var CC_LABEL_MAP = {
       </div>
       <div class="login-actions">
         <button type="submit" class="submit-btn">Sign in</button>
-        <button type="button" class="submit-btn secondary" onclick="hideAdminLogin()">Cancel</button>
+        <button type="button" class="submit-btn secondary" data-action="hide-admin-login">Cancel</button>
       </div>
     </form>
   </div>
@@ -1261,1068 +1263,11 @@ var CC_LABEL_MAP = {
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-brand">Cosmo<span style="color:var(--gold)">Cause</span></div>
-  <p>Open-access academic paper repository • Built for Blogger • <a href="https://github.com/p20210454-source/CosmoCause" target="_blank" rel="noopener">GitHub</a></p>
-  <p style="margin-top:8px;font-size:12px;">CC BY 4.0 — Free to use, share, and adapt with attribution</p>
+  <div class="footer-brand">Universe<span style="color:var(--gold)">InTouch</span></div>
+  <p>Open-access academic paper repository &middot; Built for Blogger &middot; <a href="https://github.com/p20210454-source/UniverseInTouch" target="_blank" rel="noopener">GitHub</a></p>
+  <p style="margin-top:8px;font-size:12px;">CC BY 4.0 &mdash; Free to use, share, and adapt with attribution</p>
 </footer>
 
-<script>
-var papers = [];
-var categories = [];
-var siteStats = null;
-var siteSettings = {};
-
-function escapeHTML(str) {
-  if (!str) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-var currentFilter = 'math';
-var visibleCount = 5;
-var homeBrowse = { papers: [], featured: null, total: 0 };
-var browseLoading = false;
-var isAdmin = false;
-var pendingAdminPage = null;
-
-var ALLOWED_PAGE_IDS = ['home','search-page','about-page','paper-view','admin-page','add-paper','manage','categories','analytics','install','settings'];
-var ADMIN_PAGE_IDS = ['admin-page','add-paper','manage','categories','analytics','install','settings'];
-
-function fieldClass(f) {
-  return { math: 'paper-field-math' }[f] || 'paper-field-default';
-}
-function accessClass(a) {
-  return { open: 'paper-access-open', peer: 'paper-access-peer' }[a] || 'paper-access-default';
-}
-function accessLabel(a) {
-  return a === 'open' ? 'Open Access' : 'Peer Reviewed';
-}
-
-// ========== API SERVICE ==========
-async function apiFetch(url, options = {}) {
-  try {
-    const res = await fetch(url, {
-      credentials: 'include',
-      ...options,
-      headers: { 'Content-Type': 'application/json', ...options.headers },
-    });
-    if (res.status === 401) {
-      isAdmin = false;
-      updateAdminLogoutUi();
-      showAdminLogin();
-      return null;
-    }
-    if (!res.ok) {
-      var errBody = await res.json().catch(function () { return {}; });
-      throw new Error(errBody.error || ('API Error: ' + res.status));
-    }
-    return await res.json();
-  } catch (err) {
-    showToast('❌ ' + err.message);
-    return null;
-  }
-}
-
-async function checkAuth() {
-  try {
-    var res = await fetch('/api/auth/me', { credentials: 'include' });
-    var data = await res.json();
-    isAdmin = !!data.authenticated;
-  } catch {
-    isAdmin = false;
-  }
-  updateAdminLogoutUi();
-  return isAdmin;
-}
-
-async function ensureAdmin() {
-  if (isAdmin) return true;
-  await checkAuth();
-  if (!isAdmin) {
-    showAdminLogin();
-    return false;
-  }
-  return true;
-}
-
-function showAdminLogin() {
-  document.getElementById('admin-login-modal').classList.add('show');
-  var userEl = document.getElementById('admin-username');
-  if (userEl && !userEl.value.trim()) userEl.value = 'admin';
-  document.getElementById('admin-password').focus();
-}
-function hideAdminLogin() {
-  document.getElementById('admin-login-modal').classList.remove('show');
-}
-function adminLoginSubmit(e) {
-  if (e) e.preventDefault();
-  return adminLogin();
-}
-async function adminLogin() {
-  var username = document.getElementById('admin-username').value.trim();
-  var password = document.getElementById('admin-password').value;
-  if (!username || !password) {
-    showToast('Enter username and password');
-    return false;
-  }
-  var res = await fetch('/api/auth/login', {
-    method: 'POST',
-    credentials: 'include',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username: username, password: password }),
-  });
-  if (!res.ok) {
-    showToast('Invalid username or password');
-    return false;
-  }
-  isAdmin = true;
-  updateAdminLogoutUi();
-  hideAdminLogin();
-  document.getElementById('admin-password').value = '';
-  var nextPage = pendingAdminPage || 'admin-page';
-  pendingAdminPage = null;
-  await refreshAdminData(true);
-  showPage(nextPage);
-  showToast('Signed in as ' + username);
-  return true;
-}
-async function adminLogout() {
-  await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
-  isAdmin = false;
-  updateAdminLogoutUi();
-  showToast('Signed out');
-}
-function updateAdminLogoutUi() {
-  var btn = document.getElementById('admin-logout-btn');
-  if (btn) btn.style.display = isAdmin ? 'flex' : 'none';
-}
-
-async function loadInitialData() {
-  const [papersData, statsData, catsData, settingsData] = await Promise.all([
-    apiFetch('/api/papers'),
-    apiFetch('/api/stats'),
-    apiFetch('/api/categories'),
-    apiFetch('/api/settings'),
-  ]);
-  if (papersData) papers = papersData;
-  if (statsData) {
-    siteStats = statsData;
-    applyStatsToUI();
-  }
-  if (catsData) categories = catsData;
-  if (settingsData) {
-    siteSettings = settingsData;
-    applySettingsToUI();
-  }
-  await fetchBrowseList();
-  renderHome();
-  bindTagCloudClicks();
-}
-
-async function fetchStats() {
-  const data = await apiFetch('/api/stats');
-  if (data) {
-    siteStats = data;
-    applyStatsToUI();
-  }
-  return data;
-}
-
-function normalizeSiteName(name) {
-  var n = String(name || '').trim();
-  if (!n || n === 'ResearchHub') return 'CosmoCause';
-  return n;
-}
-
-function applyBrandToUI(name) {
-  var title = normalizeSiteName(name);
-  document.title = title + ' — Academic Paper Blog';
-  var brand = document.querySelector('.topbar-brand');
-  if (brand) {
-    if (title === 'CosmoCause') {
-      brand.innerHTML = 'Cosmo<span>Cause</span>';
-    } else {
-      brand.textContent = title;
-    }
-  }
-  var sidebarName = document.querySelector('.sidebar-logo span:first-child');
-  if (sidebarName) sidebarName.textContent = title;
-  var footerBrand = document.querySelector('.footer-brand');
-  if (footerBrand && title === 'CosmoCause') {
-    footerBrand.innerHTML = 'Cosmo<span style="color:var(--gold)">Cause</span>';
-  }
-}
-
-function applySettingsToUI() {
-  if (siteSettings.blogTitle) {
-    siteSettings.blogTitle = normalizeSiteName(siteSettings.blogTitle);
-  }
-  var map = {
-    'set-blog-title': 'blogTitle',
-    'set-tagline': 'tagline',
-    'set-papers-per-page': 'papersPerPage',
-    'set-featured-id': 'featuredPaperId',
-    'set-theme': 'theme',
-  };
-  Object.keys(map).forEach(function (id) {
-    var el = document.getElementById(id);
-    var key = map[id];
-    if (el && siteSettings[key] !== undefined) el.value = siteSettings[key];
-  });
-  var tag = document.querySelector('.hero-tag');
-  if (tag && siteSettings.tagline) tag.textContent = siteSettings.tagline;
-  applyBrandToUI(siteSettings.blogTitle || 'CosmoCause');
-  if (siteSettings.papersPerPage) {
-    visibleCount = Math.min(parseInt(siteSettings.papersPerPage, 10) || 5, 50);
-  }
-}
-
-function applyStatsToUI() {
-  if (!siteStats) return;
-  var set = function (id, val) {
-    var el = document.getElementById(id);
-    if (el) el.textContent = val;
-  };
-  var published = siteStats.publishedCount !== undefined
-    ? siteStats.publishedCount
-    : siteStats.totalPapers;
-  set('stat-total', published);
-  set('sidebar-total', published);
-  set('m-total', published);
-  set('m-views', Number(siteStats.totalViews || 0).toLocaleString());
-  set('m-citations', Number(siteStats.totalCitations || 0).toLocaleString());
-  set('m-open-pct', (siteStats.openAccessPercent || 0) + '%');
-  set('m-subscribers', siteStats.subscribers || 0);
-  if (siteStats.draftCount !== undefined) set('m-drafts', siteStats.draftCount);
-  set('sidebar-month', siteStats.publishedThisMonth !== undefined ? siteStats.publishedThisMonth : '—');
-  set('sidebar-views', Number(siteStats.totalViews || 0).toLocaleString());
-  set('sidebar-citations', Number(siteStats.totalCitations || 0).toLocaleString());
-  set('sidebar-open-pct', (siteStats.openAccessPercent || 0) + '%');
-  set('sidebar-peer-pct', (siteStats.peerReviewedPercent || 0) + '%');
-  set('sidebar-avg-citations', siteStats.avgCitations || '0');
-  set('a-total-views', Number(siteStats.totalViews || 0).toLocaleString());
-  set('a-total-citations', Number(siteStats.totalCitations || 0).toLocaleString());
-  set('a-subscribers', siteStats.subscribers || 0);
-  if (siteStats.topPaper) {
-    set('a-top-views', siteStats.topPaper.views);
-    set('a-top-title', (siteStats.topPaper.title || '').substring(0, 40));
-  }
-}
-
-function renderViewsByField(el, rows, emptyText) {
-  if (!el) return;
-  if (!rows || !rows.length) {
-    el.innerHTML = '<div class="dash-empty">' + (emptyText || 'No view data yet. Publish papers to see trends.') + '</div>';
-    return;
-  }
-  var max = Math.max.apply(null, rows.map(function (r) { return r.views; }).concat([1]));
-  var catBySlug = {};
-  categories.forEach(function (c) { catBySlug[c.slug] = c; });
-  el.innerHTML = rows.map(function (r) {
-    var cat = catBySlug[r.field];
-    var label = cat ? cat.name : fieldName(r.field);
-    var pct = Math.round((r.views / max) * 100);
-    return '<div class="dash-bar-row">' +
-      '<span class="dash-bar-label">' + escapeHTML(label) + '</span>' +
-      '<div class="dash-bar-track"><div class="dash-bar-fill" style="width:' + pct + '%"></div></div>' +
-      '<span class="dash-bar-val">' + r.views + '</span></div>';
-  }).join('');
-}
-
-function updateDashWelcome(d) {
-  var welcome = document.getElementById('dash-welcome');
-  if (welcome && d) {
-    welcome.textContent =
-      d.publishedCount + ' published · ' + d.draftCount + ' drafts · ' +
-      Number(d.totalViews).toLocaleString() + ' total views';
-  }
-}
-
-async function refreshAdminData(forceRender) {
-  if (!isAdmin) return null;
-  var data = await apiFetch('/api/admin/dashboard');
-  if (!data) return null;
-  siteStats = Object.assign({}, siteStats || {}, data);
-  siteStats.totalPapers = data.publishedCount;
-  applyStatsToUI();
-  var adminPage = document.getElementById('admin-page');
-  if (forceRender || (adminPage && adminPage.classList.contains('active'))) {
-    renderAdminDashboard(data);
-    updateDashWelcome(data);
-  }
-  return data;
-}
-
-async function fetchBrowseList() {
-  const params = new URLSearchParams({
-    field: currentFilter,
-    limit: String(visibleCount),
-    offset: '0',
-  });
-  const data = await apiFetch('/api/papers/browse?' + params.toString());
-  if (!data) return false;
-  homeBrowse.papers = data.papers || [];
-  homeBrowse.featured = data.featured || null;
-  homeBrowse.total = data.total || 0;
-  homeBrowse.papers.forEach(function (p) {
-    var i = papers.findIndex(function (x) { return x.id === p.id; });
-    if (i >= 0) papers[i] = p;
-    else papers.push(p);
-  });
-  if (homeBrowse.featured) {
-    var fi = papers.findIndex(function (x) { return x.id === homeBrowse.featured.id; });
-    if (fi >= 0) papers[fi] = homeBrowse.featured;
-    else papers.push(homeBrowse.featured);
-  }
-  return true;
-}
-
-async function browsePapers() {
-  if (browseLoading) return;
-  browseLoading = true;
-  var btn = document.getElementById('browse-papers-btn');
-  if (btn) {
-    btn.setAttribute('aria-busy', 'true');
-    btn.style.opacity = '0.7';
-  }
-  var grid = document.getElementById('papers-grid');
-  showPage('home');
-  if (grid) {
-    grid.innerHTML = '<p style="text-align:center;padding:32px;color:var(--muted)">Loading papers from server…</p>';
-  }
-  visibleCount = 5;
-  const ok = await fetchBrowseList();
-  browseLoading = false;
-  if (btn) {
-    btn.removeAttribute('aria-busy');
-    btn.style.opacity = '';
-  }
-  if (ok) {
-    renderHome();
-    showToast('Loaded ' + homeBrowse.total + ' paper' + (homeBrowse.total === 1 ? '' : 's'));
-  }
-}
-
-
-// ========== NAVIGATION ==========
-function openAdminPanel() {
-  toggleSidebar();
-  showPage('admin-page');
-}
-
-function pageIdFromHash(hash) {
-  var raw = (hash || '').replace(/^#/, '').trim().toLowerCase();
-  if (!raw) return null;
-  if (raw === 'admin' || raw === 'dashboard') return 'admin-page';
-  if (ALLOWED_PAGE_IDS.indexOf(raw) !== -1) return raw;
-  return null;
-}
-
-function applyHashRoute() {
-  var id = pageIdFromHash(location.hash);
-  if (id) showPage(id);
-}
-
-function showPage(id) {
-  if (ALLOWED_PAGE_IDS.indexOf(id) === -1) return;
-  if (ADMIN_PAGE_IDS.indexOf(id) !== -1 && !isAdmin) {
-    pendingAdminPage = id;
-    checkAuth().then(function (ok) {
-      if (!ok) {
-        showAdminLogin();
-        return;
-      }
-      pendingAdminPage = null;
-      showPage(id);
-    });
-    return;
-  }
-  pendingAdminPage = null;
-  document.querySelectorAll('.page').forEach(function (p) { p.classList.remove('active'); });
-  var el = document.getElementById(id);
-  if (el) el.classList.add('active');
-  closeSidebar();
-  document.querySelectorAll('.sidebar-link').forEach(function (a) { a.classList.remove('active'); });
-  var link = document.querySelector('.sidebar-link[data-page="' + id + '"]');
-  if (link) link.classList.add('active');
-  if (ADMIN_PAGE_IDS.indexOf(id) !== -1) {
-    try {
-      history.replaceState(null, '', id === 'admin-page' ? '#admin' : '#' + id);
-    } catch (e) { /* ignore */ }
-  } else if (location.hash) {
-    try {
-      history.replaceState(null, '', location.pathname + location.search);
-    } catch (e) { /* ignore */ }
-  }
-  if (id === 'home') renderHome();
-  if (id === 'manage') loadAdminPapers();
-  if (id === 'admin-page') loadAdminDashboard();
-  if (id === 'categories') loadCategories();
-  if (id === 'analytics') {
-    if (isAdmin) {
-      refreshAdminData().then(function () { renderAnalytics(); });
-    } else {
-      fetchStats().then(function () { renderAnalytics(); });
-    }
-  }
-  if (id === 'settings') loadAdminSettings();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// ========== SIDEBAR ==========
-function toggleSidebar() {
-  document.getElementById('admin-sidebar').classList.toggle('open');
-  document.getElementById('overlay').classList.toggle('show');
-}
-function closeSidebar() {
-  document.getElementById('admin-sidebar').classList.remove('open');
-  document.getElementById('overlay').classList.remove('show');
-}
-
-// ========== RENDER HOME ==========
-function renderHome() {
-  renderFeatured();
-  renderPapers();
-  renderTrending();
-  renderTags();
-  if (siteStats) applyStatsToUI();
-}
-
-function renderFeatured() {
-  var fp = homeBrowse.featured || papers.find(p => p.featured);
-  var el = document.getElementById('featured-section');
-  if (!fp || !el) return;
-  el.innerHTML = `
-    <div class="featured-paper" onclick="openPaper(${fp.id})">
-      <span class="featured-label">⭐ Featured Paper</span>
-      <div class="paper-meta">
-        <span class="paper-field ${fieldClass(fp.field)}">${escapeHTML(fieldName(fp.field))}</span>
-        <span class="paper-access ${accessClass(fp.access)}">${accessLabel(fp.access)}</span>
-        <span class="paper-date">${formatDate(fp.date)}</span>
-      </div>
-      <a class="paper-title" style="font-size:26px;color:#fff">${escapeHTML(fp.title)}</a>
-      <p class="paper-authors">${escapeHTML(fp.authors)}</p>
-      <p class="paper-abstract">${fp.abstract ? escapeHTML(fp.abstract.substring(0, 220)) + '...' : ''}</p>
-      <div class="paper-footer">
-        ${fp.tags.map(t=>`<span class="paper-tag" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);border-color:rgba(255,255,255,0.15)">${escapeHTML(t)}</span>`).join('')}
-        <div class="paper-stats" style="margin-left:auto">
-          <span class="stat-chip" style="color:rgba(255,255,255,0.4)">📄 ${escapeHTML(fp.journal)}</span>
-          <span class="stat-chip" style="color:rgba(255,255,255,0.4)">🔗 ${fp.citations.toLocaleString()} citations</span>
-        </div>
-      </div>
-    </div>`;
-}
-
-function getPapersFiltered() {
-  if (homeBrowse.papers.length || homeBrowse.total > 0) {
-    return homeBrowse.papers;
-  }
-  var list = currentFilter === 'all' ? papers : papers.filter(p => p.field === currentFilter);
-  return list.filter(p => !p.featured);
-}
-
-function renderPapers() {
-  var grid = document.getElementById('papers-grid');
-  if (!grid) return;
-  var filtered = getPapersFiltered();
-  if (!filtered.length && homeBrowse.total === 0) {
-    grid.innerHTML = '<p style="text-align:center;padding:32px;color:var(--muted)">No papers in this field yet. Submit research or try another filter.</p>';
-  } else {
-    grid.innerHTML = filtered.map(p => paperCardHTML(p)).join('');
-  }
-  var btn = document.getElementById('load-more-btn');
-  if (btn) btn.style.display = homeBrowse.total > filtered.length ? 'inline-block' : 'none';
-}
-
-function paperCardHTML(p) {
-  return `<div class="paper-card" onclick="openPaper(${p.id})">
-    <div class="paper-meta">
-      <span class="paper-field ${fieldClass(p.field)}">${escapeHTML(fieldName(p.field))}</span>
-      <span class="paper-access ${accessClass(p.access)}">${accessLabel(p.access)}</span>
-      <span class="paper-date">${formatDate(p.date)}</span>
-    </div>
-    <a class="paper-title">${escapeHTML(p.title)}</a>
-    <p class="paper-authors">${escapeHTML(p.authors)}</p>
-    <p class="paper-abstract paper-abstract-preview">${escapeHTML(p.abstract)}</p>
-    <div class="paper-footer">
-      ${p.tags.slice(0,4).map(t=>`<a class="paper-tag">${escapeHTML(t)}</a>`).join('')}
-      <div class="paper-stats">
-        <span class="stat-chip">📄 ${escapeHTML(p.journal)}</span>
-        <span class="stat-chip">🔗 ${p.citations.toLocaleString()}</span>
-        <span class="stat-chip">👁 ${p.views}</span>
-      </div>
-    </div>
-  </div>`;
-}
-
-async function renderTrending() {
-  var el = document.getElementById('trending-widget');
-  if (!el) return;
-  var sorted = await apiFetch('/api/papers/trending?limit=5');
-  if (!sorted || !sorted.length) {
-    sorted = [...papers].sort((a, b) => b.views - a.views).slice(0, 5);
-  }
-  el.innerHTML = sorted.map((p, i) => `<div class="trending-item">
-    <div class="trending-rank">#${i + 1}</div>
-    <div class="trending-title" role="button" tabindex="0" data-paper-id="${p.id}">${escapeHTML(p.title)}</div>
-    <div class="trending-meta">${p.views} views • ${p.citations} citations</div>
-  </div>`).join('');
-  el.querySelectorAll('[data-paper-id]').forEach(function (node) {
-    node.addEventListener('click', function () {
-      openPaper(parseInt(node.getAttribute('data-paper-id'), 10));
-    });
-  });
-}
-
-async function renderTags() {
-  var el = document.getElementById('tag-cloud');
-  if (!el) return;
-  var tagList = await apiFetch('/api/papers/tags');
-  if (!tagList) return;
-  el.innerHTML = tagList.slice(0, 18).map(function (t) {
-    return `<button type="button" class="tag-pill" data-tag="${escapeHTML(t.name)}">${escapeHTML(t.name)} <span style="color:var(--accent)">${t.count}</span></button>`;
-  }).join('');
-  bindTagCloudClicks();
-}
-
-function bindTagCloudClicks() {
-  var el = document.getElementById('tag-cloud');
-  if (!el || el._tagBound) return;
-  el._tagBound = true;
-  el.addEventListener('click', function (e) {
-    var btn = e.target.closest('[data-tag]');
-    if (btn) searchByTag(btn.getAttribute('data-tag'));
-  });
-}
-
-// ========== PAPER VIEW ==========
-async function openPaper(id) {
-  var p = papers.find(function (x) { return x.id === id; });
-  if (!p) {
-    var url = isAdmin ? '/api/admin/papers/' + id : '/api/papers/' + id;
-    var fetched = await apiFetch(url);
-    if (!fetched) return;
-    p = fetched;
-    papers.push(p);
-  }
-
-  if (p.status === 'published') {
-    await apiFetch('/api/papers/' + id + '/view', { method: 'POST' });
-  }
-  p.views = (p.views || 0) + 1;
-  
-  document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
-  document.getElementById('paper-view').classList.add('active');
-  var refs = (p.refs || []).map(r => `<li>${escapeHTML(r)}</li>`).join('');
-  document.getElementById('paper-view-content').innerHTML = `
-    <button class="back-btn" onclick="showPage('home')">← Back to Papers</button>
-    <div class="paper-meta" style="margin-bottom:16px">
-      <span class="paper-field ${fieldClass(p.field)}">${escapeHTML(fieldName(p.field))}</span>
-      <span class="paper-access ${accessClass(p.access)}">${accessLabel(p.access)}</span>
-    </div>
-    <h1 class="paper-full-title">${escapeHTML(p.title)}</h1>
-    <p style="font-size:17px;color:var(--muted);font-style:italic;margin-bottom:8px">By ${escapeHTML(p.authors)}</p>
-    <div class="paper-info-bar">
-      <div class="info-item"><div class="info-label">Journal</div><div class="info-val">${escapeHTML(p.journal)}</div></div>
-      <div class="info-item"><div class="info-label">Published</div><div class="info-val">${formatDate(p.date)}</div></div>
-      <div class="info-item"><div class="info-label">DOI / ID</div><div class="info-val" style="font-family:'JetBrains Mono',monospace;font-size:12px">${escapeHTML(p.doi)}</div></div>
-      <div class="info-item"><div class="info-label">Citations</div><div class="info-val">${p.citations.toLocaleString()}</div></div>
-    </div>
-    <div class="section-heading">Abstract</div>
-    <div class="abstract-text">${escapeHTML(p.abstract)}</div>
-    <div class="section-heading">Full Text</div>
-    <div class="paper-body-text">${(p.body||'').split('\n\n').map(par=>`<p>${escapeHTML(par)}</p>`).join('')}</div>
-    <div class="section-heading">Keywords</div>
-    <div class="tag-cloud" style="margin-bottom:24px">${p.tags.map(t=>`<button class="tag-pill">${escapeHTML(t)}</button>`).join('')}</div>
-    ${refs ? `<div class="section-heading">References</div><ul class="references-list">${refs}</ul>` : ''}
-    <div class="section-heading">Cite This Paper</div>
-    <div class="citation-box"><button class="copy-cite-btn" onclick="copyCitation(${p.id})">Copy</button>${escapeHTML(p.authors)} (${new Date(p.date).getFullYear()}). ${escapeHTML(p.title)}. <em>${escapeHTML(p.journal)}</em>. ${escapeHTML(p.doi)}</div>
-    <div style="display:flex;gap:12px;margin-top:24px;flex-wrap:wrap">
-      <a class="btn-primary" href="https://scholar.google.com/scholar?q=${encodeURIComponent(p.title)}" target="_blank">Google Scholar</a>
-      ${p.doi && p.doi.startsWith('arXiv') ? `<a class="btn-outline" style="color:var(--ink);border-color:var(--border)" href="https://arxiv.org/abs/${escapeHTML(p.doi.replace('arXiv:',''))}" target="_blank">View on arXiv</a>` : ''}
-    </div>`;
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-// ========== FILTER ==========
-async function filterPapers(field, btn) {
-  currentFilter = field;
-  visibleCount = 5;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  await fetchBrowseList();
-  renderPapers();
-  renderFeatured();
-}
-
-async function loadMore() {
-  visibleCount += 5;
-  await fetchBrowseList();
-  renderPapers();
-}
-
-// ========== SEARCH ==========
-function quickSearch(val) {
-  if (!val || val.length < 2) return;
-  showPage('search-page');
-  document.getElementById('main-search').value = val;
-  performSearch(val);
-}
-async function performSearch(query) {
-  var q = (query || document.getElementById('main-search').value).trim();
-  var el = document.getElementById('search-results');
-  if (!el) return;
-  if (!q) {
-    el.innerHTML = '<p style="color:var(--muted);padding:32px;text-align:center;">Enter a search term.</p>';
-    return;
-  }
-  el.innerHTML = '<p style="color:var(--muted);padding:32px;text-align:center;">Searching…</p>';
-  var params = new URLSearchParams({ field: 'all', q: q, limit: '50', offset: '0' });
-  var data = await apiFetch('/api/papers/browse?' + params.toString());
-  if (!data) return;
-  var results = data.papers || [];
-  results.forEach(function (p) {
-    var i = papers.findIndex(function (x) { return x.id === p.id; });
-    if (i >= 0) papers[i] = p;
-    else papers.push(p);
-  });
-  el.innerHTML = results.length
-    ? results.map(function (p) { return paperCardHTML(p); }).join('')
-    : '<p style="color:var(--muted);padding:32px;text-align:center;font-size:18px;">No papers found for "' + escapeHTML(q) + '"</p>';
-}
-function searchByTag(tag) {
-  showPage('search-page');
-  document.getElementById('main-search').value = tag;
-  performSearch(tag);
-}
-
-// ========== ADMIN: ADD PAPER ==========
-async function loadAdminPapers() {
-  if (!(await ensureAdmin())) return;
-  var data = await apiFetch('/api/admin/papers');
-  if (data) {
-    papers = data;
-    renderManage();
-    updateStats();
-  }
-}
-
-async function addPaper() {
-  if (!(await ensureAdmin())) return;
-  var title = document.getElementById('f-title').value.trim();
-  var authors = document.getElementById('f-authors').value.trim();
-  var date = document.getElementById('f-date').value;
-  if (!title || !authors) { showToast('Please fill in required fields (Title, Authors)'); return; }
-  
-  var paperData = {
-    featured: document.getElementById('f-featured').value === 'yes',
-    status: 'published',
-    title, authors, date: date || new Date().toISOString().slice(0,10),
-    field: document.getElementById('f-field').value,
-    access: document.getElementById('f-access').value,
-    journal: document.getElementById('f-journal').value || 'Unpublished',
-    doi: document.getElementById('f-doi').value || '',
-    abstract: document.getElementById('f-abstract').value,
-    body: document.getElementById('f-body').value,
-    tags: document.getElementById('f-tags').value.split(',').map(t=>t.trim()).filter(Boolean),
-    refs: document.getElementById('f-refs').value.split('\n').filter(Boolean),
-    citations: parseInt(document.getElementById('f-citations').value) || 0
-  };
-
-  const savedPaper = await apiFetch('/api/papers', {
-    method: 'POST',
-    body: JSON.stringify(paperData)
-  });
-
-  if (savedPaper) {
-    if (paperData.featured) papers.forEach(function (p) { p.featured = false; });
-    papers.unshift(savedPaper);
-    clearForm();
-    await fetchBrowseList();
-    await refreshAdminData();
-    showToast('✓ Paper published successfully!');
-    setTimeout(function () { showPage('home'); }, 1000);
-  }
-}
-
-async function saveDraft() {
-  if (!(await ensureAdmin())) return;
-  var title = document.getElementById('f-title').value.trim();
-  var authors = document.getElementById('f-authors').value.trim();
-  if (!title || !authors) {
-    showToast('Title and authors required for a draft');
-    return;
-  }
-  var paperData = {
-    featured: false,
-    status: 'draft',
-    title: title,
-    authors: authors,
-    date: document.getElementById('f-date').value || new Date().toISOString().slice(0, 10),
-    field: document.getElementById('f-field').value,
-    access: document.getElementById('f-access').value,
-    journal: document.getElementById('f-journal').value || 'Unpublished',
-    doi: document.getElementById('f-doi').value || '',
-    abstract: document.getElementById('f-abstract').value,
-    body: document.getElementById('f-body').value,
-    tags: document.getElementById('f-tags').value.split(',').map(function (t) { return t.trim(); }).filter(Boolean),
-    refs: document.getElementById('f-refs').value.split('\n').filter(Boolean),
-    citations: parseInt(document.getElementById('f-citations').value, 10) || 0,
-  };
-  var saved = await apiFetch('/api/papers', { method: 'POST', body: JSON.stringify(paperData) });
-  if (saved) {
-    papers.unshift(saved);
-    await refreshAdminData();
-    showToast('Draft saved to server.');
-  }
-}
-
-function clearForm() {
-  ['f-title','f-authors','f-date','f-journal','f-doi','f-abstract','f-body','f-tags','f-refs','f-pdf','f-citations'].forEach(id => {
-    var el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-}
-
-// ========== ADMIN: MANAGE ==========
-function renderManage() {
-  var table = document.getElementById('manage-table');
-  var count = document.getElementById('manage-count');
-  if (!table) return;
-  if (count) count.textContent = papers.length;
-  table.innerHTML = `<thead><tr>
-    <th>Title</th><th>Authors</th><th>Field</th><th>Date</th><th>Status</th><th>Views</th><th>Actions</th>
-  </tr></thead><tbody>` +
-  papers.map(p => `<tr>
-    <td style="max-width:280px"><strong style="font-size:13px">${escapeHTML(p.title.substring(0,60))}${p.title.length>60?'...':''}</strong></td>
-    <td style="font-size:13px;color:var(--muted)">${escapeHTML(p.authors.substring(0,30))}...</td>
-    <td><span class="paper-field ${fieldClass(p.field)}" style="font-size:9px">${escapeHTML(fieldName(p.field))}</span></td>
-    <td style="font-family:'JetBrains Mono',monospace;font-size:11px;white-space:nowrap">${formatDate(p.date)}</td>
-    <td><span class="status-dot ${statusDotClass(p.status)}"></span><span style="font-size:12px">${escapeHTML(p.status || 'published')}</span></td>
-    <td style="font-family:'JetBrains Mono',monospace;font-size:12px">${p.views}</td>
-    <td>
-      <button class="action-btn" onclick="openPaper(${p.id})">View</button>
-      <button class="action-btn danger" onclick="deletePaper(${p.id})">Delete</button>
-    </td>
-  </tr>`).join('') + '</tbody>';
-}
-
-async function deletePaper(id) {
-  if (!(await ensureAdmin())) return;
-  if (!confirm('Are you sure you want to delete this paper?')) return;
-  
-  const res = await apiFetch(`/api/papers/${id}`, { method: 'DELETE' });
-  if (res) {
-    papers = papers.filter(function (p) { return p.id !== id; });
-    await fetchBrowseList();
-    await refreshAdminData();
-    renderManage();
-    showToast('Paper deleted.');
-  }
-}
-
-// ========== ADMIN DASHBOARD ==========
-function formatRelativeTime(iso) {
-  if (!iso) return 'Recently';
-  var then = new Date(iso).getTime();
-  if (isNaN(then)) return 'Recently';
-  var sec = Math.floor((Date.now() - then) / 1000);
-  if (sec < 60) return 'Just now';
-  if (sec < 3600) return Math.floor(sec / 60) + ' min ago';
-  if (sec < 86400) return Math.floor(sec / 3600) + ' hr ago';
-  if (sec < 604800) return Math.floor(sec / 86400) + ' days ago';
-  return formatDate(iso);
-}
-
-function statusDotClass(status) {
-  if (status === 'draft') return 'draft';
-  return 'published';
-}
-
-async function loadAdminDashboard() {
-  if (!(await ensureAdmin())) return;
-  var data = await refreshAdminData(true);
-  if (!data) showToast('Could not load dashboard — try signing in again.');
-}
-
-function renderAdminDashboard(d) {
-  var set = function (id, val) {
-    var el = document.getElementById(id);
-    if (el) el.textContent = val;
-  };
-  set('m-total', d.publishedCount);
-  set('m-drafts', d.draftCount);
-  set('m-views', Number(d.totalViews).toLocaleString());
-  set('m-citations', Number(d.totalCitations).toLocaleString());
-  set('m-open-pct', d.openAccessPercent + '%');
-  set('m-subscribers', d.subscribers);
-  set('m-total-sub', d.totalPapers + ' total in database');
-  set('m-drafts-sub', d.draftCount ? 'Needs review' : 'All clear');
-  set('m-avg-cite', 'Avg ' + d.avgCitations + ' per paper');
-  set('m-peer-pct', d.peerReviewedPercent + '% peer reviewed');
-  set('m-categories', (d.categoryCount || 0) + ' categories');
-  set('stat-total', d.publishedCount);
-  set('sidebar-total', d.publishedCount);
-
-  renderViewsByField(
-    document.getElementById('dash-field-chart'),
-    d.viewsByField || [],
-    'No view data yet. Publish papers to see trends.'
-  );
-
-  var featEl = document.getElementById('dash-featured');
-  if (featEl) {
-    if (d.featuredPaper) {
-      var fp = d.featuredPaper;
-      featEl.innerHTML =
-        '<div class="dash-featured">' +
-        '<div class="dash-featured-label">⭐ Featured on homepage</div>' +
-        '<div class="dash-featured-title">' + escapeHTML(fp.title) + '</div>' +
-        '<div class="dash-featured-meta">' + escapeHTML(fp.authors) + ' · ' + formatDate(fp.date) + ' · ' + (fp.views || 0) + ' views</div>' +
-        '<button type="button" class="action-btn" data-paper-id="' + fp.id + '">View paper</button></div>';
-      featEl.querySelector('[data-paper-id]').addEventListener('click', function () {
-        openPaper(fp.id);
-      });
-    } else {
-      featEl.innerHTML = '<div class="dash-empty">Mark a paper as featured when publishing, or set Featured Paper ID in Settings.</div>';
-    }
-  }
-
-  var topEl = document.getElementById('dash-top-paper');
-  if (topEl) {
-    if (d.topPaper) {
-      var tp = d.topPaper;
-      topEl.innerHTML =
-        '<div class="dash-featured" style="border-left-color:var(--gold)">' +
-        '<div class="dash-featured-label">Most viewed</div>' +
-        '<div class="dash-featured-title">' + escapeHTML(tp.title) + '</div>' +
-        '<div class="dash-featured-meta">' + Number(tp.views).toLocaleString() + ' views · ' + escapeHTML(tp.authors || '') + '</div>' +
-        '<button type="button" class="action-btn" data-top-id="' + tp.id + '">Open</button></div>';
-      topEl.querySelector('[data-top-id]').addEventListener('click', function () {
-        openPaper(tp.id);
-      });
-    } else {
-      topEl.innerHTML = '<div class="dash-empty">No published papers yet.</div>';
-    }
-  }
-
-  var table = document.getElementById('admin-recent-table');
-  if (table) {
-    var recent = d.recentPapers || [];
-    if (!recent.length) {
-      table.innerHTML = '<tbody><tr><td colspan="4" class="dash-empty">No published papers yet.</td></tr></tbody>';
-    } else {
-      table.innerHTML = '<thead><tr><th>Title</th><th>Field</th><th>Views</th><th>Status</th><th></th></tr></thead><tbody>' +
-        recent.map(function (p) {
-          return '<tr>' +
-            '<td style="max-width:220px;font-size:13px"><strong>' + escapeHTML(p.title.substring(0, 45)) + (p.title.length > 45 ? '…' : '') + '</strong></td>' +
-            '<td><span class="paper-field ' + fieldClass(p.field) + '" style="font-size:9px">' + escapeHTML(fieldName(p.field)) + '</span></td>' +
-            '<td style="font-family:\'JetBrains Mono\',monospace;font-size:12px">' + (p.views || 0) + '</td>' +
-            '<td><span class="status-dot ' + statusDotClass(p.status) + '"></span><span style="font-size:12px">' + escapeHTML(p.status || 'published') + '</span></td>' +
-            '<td><button type="button" class="action-btn" data-recent-id="' + p.id + '">View</button></td>' +
-            '</tr>';
-        }).join('') + '</tbody>';
-      table.querySelectorAll('[data-recent-id]').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          openPaper(parseInt(btn.getAttribute('data-recent-id'), 10));
-        });
-      });
-    }
-  }
-
-  var actEl = document.getElementById('dash-activity');
-  if (actEl) {
-    var activity = d.activity || [];
-    if (!activity.length) {
-      actEl.innerHTML = '<div class="dash-empty">Updates appear when you add, edit, or save drafts.</div>';
-    } else {
-      var icons = { add: '➕', edit: '✏️' };
-      actEl.innerHTML = activity.map(function (item) {
-        var iconClass = item.type === 'edit' ? 'edit' : 'add';
-        return '<div class="activity-item clickable" data-activity-id="' + item.paperId + '" role="button" tabindex="0">' +
-          '<div class="activity-icon ' + iconClass + '">' + (icons[item.type] || '•') + '</div>' +
-          '<div><div class="activity-text">' + escapeHTML(item.text) + '</div>' +
-          '<div class="activity-time">' + formatRelativeTime(item.at) + '</div></div></div>';
-      }).join('');
-      actEl.querySelectorAll('[data-activity-id]').forEach(function (row) {
-        row.addEventListener('click', function () {
-          openPaper(parseInt(row.getAttribute('data-activity-id'), 10));
-        });
-      });
-    }
-  }
-}
-
-async function loadCategories() {
-  var data = await apiFetch('/api/categories');
-  if (data) categories = data;
-  renderCategories();
-}
-
-// ========== CATEGORIES ==========
-function renderCategories() {
-  var el = document.getElementById('cat-list');
-  if (!el) return;
-  el.innerHTML = categories.map(function (c) {
-    var safeColor = /^#[0-9A-Fa-f]{6}$/.test(c.color) ? c.color : '#c0392b';
-    return `<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px dashed var(--border)">
-    <span style="width:14px;height:14px;border-radius:50%;background:${safeColor};display:inline-block;flex-shrink:0"></span>
-    <span style="flex:1;font-size:15px">${escapeHTML(c.name)}</span>
-    <button type="button" class="action-btn danger" data-cat-id="${c.id}">✕</button>
-  </div>`;
-  }).join('');
-  el.querySelectorAll('[data-cat-id]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      deleteCategory(parseInt(btn.getAttribute('data-cat-id'), 10));
-    });
-  });
-}
-
-async function addCategory() {
-  if (!(await ensureAdmin())) return;
-  var name = document.getElementById('cat-name').value.trim();
-  var color = document.getElementById('cat-color').value;
-  if (!name) return;
-  var created = await apiFetch('/api/categories', {
-    method: 'POST',
-    body: JSON.stringify({ name: name, color: color }),
-  });
-  if (created) {
-    categories.push(created);
-    document.getElementById('cat-name').value = '';
-    renderCategories();
-    await refreshAdminData();
-    showToast('Category added!');
-  }
-}
-
-async function deleteCategory(id) {
-  if (!(await ensureAdmin())) return;
-  var res = await apiFetch('/api/categories/' + id, { method: 'DELETE' });
-  if (res) {
-    categories = categories.filter(function (c) { return c.id !== id; });
-    renderCategories();
-    await refreshAdminData();
-    showToast('Category removed.');
-  }
-}
-
-// ========== ANALYTICS ==========
-function renderAnalytics() {
-  if (!siteStats) return;
-  renderViewsByField(
-    document.getElementById('analytics-chart'),
-    siteStats.viewsByField || [],
-    'No view data yet.'
-  );
-  applyStatsToUI();
-}
-
-async function loadAdminSettings() {
-  if (!(await ensureAdmin())) return;
-  var data = await apiFetch('/api/admin/settings');
-  if (data) {
-    siteSettings = data;
-    applySettingsToUI();
-  }
-}
-
-async function saveSettings() {
-  if (!(await ensureAdmin())) return;
-  var payload = {
-    blogTitle: document.getElementById('set-blog-title').value.trim(),
-    tagline: document.getElementById('set-tagline').value.trim(),
-    papersPerPage: document.getElementById('set-papers-per-page').value,
-    featuredPaperId: document.getElementById('set-featured-id').value.trim(),
-    theme: document.getElementById('set-theme').value,
-  };
-  var data = await apiFetch('/api/settings', { method: 'PUT', body: JSON.stringify(payload) });
-  if (data) {
-    siteSettings = data;
-    applySettingsToUI();
-    await fetchBrowseList();
-    await refreshAdminData();
-    showToast('Settings saved to server.');
-  }
-}
-
-async function subscribeNewsletter() {
-  var input = document.getElementById('newsletter-email');
-  var email = input && input.value.trim();
-  if (!email) {
-    showToast('Please enter your email.');
-    return;
-  }
-  var res = await apiFetch('/api/subscribers', {
-    method: 'POST',
-    body: JSON.stringify({ email: email }),
-  });
-  if (res) {
-    input.value = '';
-    await fetchStats();
-    showToast('Subscribed! You\'ll receive weekly digests.');
-  }
-}
-
-// ========== HELPERS ==========
-function fieldName(f) {
-  var c = categories.find(function (x) { return x.slug === f; });
-  if (c) return c.name;
-  return { math: 'Mathematics' }[f] || f;
-}
-function formatDate(d) {
-  if (!d) return '';
-  return new Date(d).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
-}
-function updateStats() {
-  if (siteStats) applyStatsToUI();
-  else {
-    var els = ['stat-total', 'sidebar-total', 'm-total'];
-    els.forEach(function (id) {
-      var el = document.getElementById(id);
-      if (el) el.textContent = papers.length;
-    });
-  }
-}
-function showToast(msg) {
-  var t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
-function copyCitation(id) {
-  var p = papers.find(x => x.id === id);
-  if (!p) return;
-  var text = `${p.authors} (${new Date(p.date).getFullYear()}). ${p.title}. ${p.journal}. ${p.doi}`;
-  navigator.clipboard.writeText(text).then(() => showToast('Citation copied to clipboard!')).catch(() => showToast('Please copy manually.'));
-}
-function copyInstall() {
-  showToast('Install code copied!');
-}
-function copyCSS() {
-  showToast('CSS code copied!');
-}
-
-// ========== INIT ==========
-document.querySelectorAll('.sidebar-link[data-page]').forEach(function (a) {
-  a.addEventListener('click', function (e) {
-    e.preventDefault();
-    showPage(a.getAttribute('data-page'));
-  });
-});
-document.getElementById('admin-logout-btn').addEventListener('click', function (e) {
-  e.preventDefault();
-  adminLogout();
-});
-applyBrandToUI('CosmoCause');
-checkAuth().then(function () {
-  applyHashRoute();
-});
-window.addEventListener('hashchange', applyHashRoute);
-loadInitialData();
-</script>
+<script src="/app.js" defer></script>
 </body>
 </html>

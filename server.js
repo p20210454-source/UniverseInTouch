@@ -17,18 +17,27 @@ const {
 } = require('./db');
 const {
   ADMIN_USERNAME,
-  ADMIN_PASSWORD,
+  assertSecureConfig,
   validateAdminCredentials,
   parseCookies,
   createSession,
-  sessionValid,
+  getSession,
   destroySession,
+  destroyAllSessions,
   requireAuth,
+  requireAuthWithCsrf,
   setSessionCookie,
   clearSessionCookie,
   SESSION_COOKIE,
 } = require('./lib/auth');
 const { rateLimit } = require('./lib/rateLimit');
+const {
+  recordLoginFailure,
+  clearLoginFailures,
+  loginLockoutMiddleware,
+} = require('./lib/loginLockout');
+const { shouldRecordView } = require('./lib/viewDedup');
+const { createPlainTextSanitizer } = require('./lib/sanitizeText');
 const {
   paperBodyValidators,
   normalizePaperInput,
@@ -37,6 +46,9 @@ const {
 
 const window = new JSDOM('').window;
 const DOMPurify = createDOMPurify(window);
+const sanitizePlainText = createPlainTextSanitizer(DOMPurify);
+
+assertSecureConfig();
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -53,11 +65,16 @@ const writeLimit = rateLimit({ windowMs: 15 * 60 * 1000, max: 120 });
 const viewLimit = rateLimit({ windowMs: 60 * 1000, max: 60 });
 const subscribeLimit = rateLimit({ windowMs: 60 * 60 * 1000, max: 10 });
 const loginLimit = rateLimit({ windowMs: 15 * 60 * 1000, max: 20 });
+const authMeLimit = rateLimit({ windowMs: 60 * 1000, max: 120 });
 
 const sendValidationErrors = (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    res.status(400).json({ errors: errors.array() });
+    if (process.env.NODE_ENV === 'production') {
+      res.status(400).json({ error: 'Invalid request' });
+    } else {
+      res.status(400).json({ error: 'Invalid request', errors: errors.array() });
+    }
     return true;
   }
   return false;
@@ -89,12 +106,12 @@ const slugify = (name) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '') || 'category';
 
-const LEGACY_SITE_NAME = 'ResearchHub';
-const SITE_NAME = 'CosmoCause';
+const LEGACY_SITE_NAMES = new Set(['ResearchHub', 'CosmoCause']);
+const SITE_NAME = 'UniverseInTouch';
 
 function normalizeBlogTitle(value) {
   const title = String(value || '').trim();
-  if (!title || title === LEGACY_SITE_NAME) return SITE_NAME;
+  if (!title || LEGACY_SITE_NAMES.has(title)) return SITE_NAME;
   return title;
 }
 
@@ -104,7 +121,7 @@ async function loadSettingsMap() {
   rows.forEach((r) => {
     settings[r.key] = r.value;
   });
-  if (settings.blogTitle === LEGACY_SITE_NAME) {
+  if (LEGACY_SITE_NAMES.has(settings.blogTitle)) {
     settings.blogTitle = SITE_NAME;
     await run(db, 'UPDATE settings SET value = ? WHERE key = ?', [SITE_NAME, 'blogTitle']);
   }
@@ -182,21 +199,32 @@ const corsOrigins = process.env.CORS_ORIGIN
   ? process.env.CORS_ORIGIN.split(',').map((s) => s.trim())
   : [`http://localhost:${port}`, 'http://127.0.0.1:' + port];
 
-app.set('trust proxy', 1);
+if (process.env.TRUST_PROXY === '1' || process.env.TRUST_PROXY === 'true') {
+  app.set('trust proxy', 1);
+}
+
+const isProduction = process.env.NODE_ENV === 'production';
 
 app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+        styleSrc: ["'self'", 'https://fonts.googleapis.com'],
+        styleSrcAttr: ["'unsafe-inline'"],
         fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-        scriptSrc: ["'self'", "'unsafe-inline'"],
+        scriptSrc: ["'self'"],
+        baseUri: ["'self'"],
+        formAction: ["'self'"],
+        objectSrc: ["'none'"],
         imgSrc: ["'self'", 'data:'],
         connectSrc: ["'self'"],
         frameAncestors: ["'none'"],
       },
     },
+    hsts: isProduction
+      ? { maxAge: 31536000, includeSubDomains: true, preload: true }
+      : false,
   })
 );
 
@@ -216,12 +244,7 @@ app.use(
 app.use(express.json({ limit: '512kb' }));
 
 app.get('/api/health', (req, res) => {
-  res.json({
-    ok: true,
-    service: 'cosmocause',
-    version: '1.0.0',
-    features: { adminDashboard: true },
-  });
+  res.json({ ok: true });
 });
 
 // ——— Auth ———
@@ -229,6 +252,7 @@ app.get('/api/health', (req, res) => {
 app.post(
   '/api/auth/login',
   loginLimit,
+  loginLockoutMiddleware,
   [
     body('username').trim().notEmpty().isLength({ max: 64 }),
     body('password').notEmpty().isLength({ max: 128 }),
@@ -236,24 +260,30 @@ app.post(
   (req, res) => {
     if (sendValidationErrors(req, res)) return;
     if (!validateAdminCredentials(req.body.username, req.body.password)) {
+      recordLoginFailure(req);
       return res.status(401).json({ error: 'Invalid username or password' });
     }
-    const token = createSession();
+    clearLoginFailures(req);
+    destroyAllSessions();
+    const { token, csrf } = createSession();
     setSessionCookie(res, token);
-    res.json({ ok: true });
+    res.json({ ok: true, csrfToken: csrf });
   }
 );
 
-app.post('/api/auth/logout', (req, res) => {
+app.post('/api/auth/logout', requireAuthWithCsrf, (req, res) => {
   const cookies = parseCookies(req);
   destroySession(cookies[SESSION_COOKIE]);
   clearSessionCookie(res);
   res.json({ ok: true });
 });
 
-app.get('/api/auth/me', (req, res) => {
-  const cookies = parseCookies(req);
-  res.json({ authenticated: sessionValid(cookies[SESSION_COOKIE]) });
+app.get('/api/auth/me', authMeLimit, (req, res) => {
+  const session = getSession(req);
+  res.json({
+    authenticated: !!session,
+    csrfToken: session ? session.csrf : null,
+  });
 });
 
 // ——— Public read APIs ———
@@ -424,7 +454,7 @@ const paperUpdateValidators = [
 
 app.post(
   '/api/papers',
-  requireAuth,
+  ...requireAuthWithCsrf,
   writeLimit,
   paperBodyValidators,
   async (req, res) => {
@@ -469,7 +499,7 @@ app.post(
 
 app.put(
   '/api/papers/:id',
-  requireAuth,
+  ...requireAuthWithCsrf,
   writeLimit,
   param('id').isInt({ min: 1 }),
   paperUpdateValidators,
@@ -535,7 +565,7 @@ app.put(
 
 app.delete(
   '/api/papers/:id',
-  requireAuth,
+  ...requireAuthWithCsrf,
   writeLimit,
   param('id').isInt({ min: 1 }),
   async (req, res) => {
@@ -556,6 +586,9 @@ app.post(
   async (req, res) => {
     if (sendValidationErrors(req, res)) return;
     try {
+      if (!shouldRecordView(req, req.params.id)) {
+        return res.json({ message: 'View already recorded' });
+      }
       const result = await run(
         db,
         `UPDATE papers SET views = views + 1 WHERE id = ? AND status = 'published'`,
@@ -762,7 +795,7 @@ app.get('/api/categories', async (req, res) => {
 
 app.post(
   '/api/categories',
-  requireAuth,
+  ...requireAuthWithCsrf,
   writeLimit,
   [
     body('name').trim().notEmpty().isLength({ max: 100 }),
@@ -791,7 +824,7 @@ app.post(
 
 app.delete(
   '/api/categories/:id',
-  requireAuth,
+  ...requireAuthWithCsrf,
   writeLimit,
   param('id').isInt({ min: 1 }),
   async (req, res) => {
@@ -832,13 +865,22 @@ app.get('/api/admin/settings', requireAuth, async (req, res) => {
 
 app.put(
   '/api/settings',
-  requireAuth,
+  ...requireAuthWithCsrf,
   writeLimit,
   [
     body('blogTitle').optional().isLength({ max: 200 }),
     body('tagline').optional().isLength({ max: 300 }),
     body('papersPerPage').optional().isInt({ min: 1, max: 50 }),
-    body('featuredPaperId').optional().isLength({ max: 20 }),
+    body('featuredPaperId')
+      .optional({ values: 'falsy' })
+      .custom((val) => {
+        if (val === '' || val === null || val === undefined) return true;
+        const n = parseInt(val, 10);
+        if (!Number.isFinite(n) || n < 0 || n > 999999999) {
+          throw new Error('Invalid featured paper id');
+        }
+        return true;
+      }),
     body('theme').optional().isIn(['paper-ink', 'dark-academia', 'clean-white']),
   ],
   async (req, res) => {
@@ -847,10 +889,13 @@ app.put(
     try {
       for (const key of allowed) {
         if (req.body[key] !== undefined) {
+          let value = String(req.body[key]);
+          if (key === 'blogTitle') value = sanitizePlainText(normalizeBlogTitle(value), 200);
+          else if (key === 'tagline') value = sanitizePlainText(value, 300);
           await run(
             db,
             'INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value',
-            [key, String(req.body[key])]
+            [key, value]
           );
           if (key === 'featuredPaperId') {
             const fid = parseInt(req.body[key], 10);
@@ -897,11 +942,7 @@ app.post(
 // ——— Unknown API (JSON 404, not HTML "Cannot GET") ———
 
 app.use('/api', (req, res) => {
-  res.status(404).json({
-    error: 'API route not found',
-    path: req.originalUrl,
-    hint: 'Restart the server from the CosmoCause project folder if admin routes are missing.',
-  });
+  res.status(404).json({ error: 'API route not found' });
 });
 
 // ——— Static site ———
@@ -914,12 +955,9 @@ app.use(express.static(PUBLIC_DIR, { index: false, dotfiles: 'deny' }));
 
 initDatabase(db)
   .then(() => {
-    if (process.env.NODE_ENV === 'production' && ADMIN_PASSWORD === 'changeme') {
-      console.warn('WARNING: Set ADMIN_PASSWORD in production.');
-    }
     app.listen(port, () => {
-      console.log(`CosmoCause backend running at http://localhost:${port}`);
-      console.log(`Admin login: username "${ADMIN_USERNAME}" (ADMIN_USERNAME / ADMIN_PASSWORD env)`);
+      console.log(`UniverseInTouch backend running at http://localhost:${port}`);
+      console.log(`Admin login: username "${ADMIN_USERNAME}" (set ADMIN_PASSWORD in .env)`);
     });
   })
   .catch((err) => {
