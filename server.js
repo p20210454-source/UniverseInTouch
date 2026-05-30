@@ -257,9 +257,10 @@ app.post(
     body('username').trim().notEmpty().isLength({ max: 64 }),
     body('password').notEmpty().isLength({ max: 128 }),
   ],
-  (req, res) => {
+  async (req, res) => {
     if (sendValidationErrors(req, res)) return;
-    if (!validateAdminCredentials(req.body.username, req.body.password)) {
+    const ok = await validateAdminCredentials(req.body.username, req.body.password);
+    if (!ok) {
       recordLoginFailure(req);
       return res.status(401).json({ error: 'Invalid username or password' });
     }
@@ -948,7 +949,27 @@ app.use('/api', (req, res) => {
 // ——— Static site ———
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(PUBLIC_DIR, 'research-blog.html'));
+  res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
+});
+
+app.get('/about', (req, res) => {
+  res.sendFile(path.join(PUBLIC_DIR, 'about.html'));
+});
+
+app.get('/search', (req, res) => {
+  res.sendFile(path.join(PUBLIC_DIR, 'search.html'));
+});
+
+app.get('/paper/:id', (req, res) => {
+  res.redirect(301, `/paper.html?id=${encodeURIComponent(req.params.id)}`);
+});
+
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(PUBLIC_DIR, 'admin.html'));
+});
+
+app.get('/research-blog.html', (req, res) => {
+  res.redirect(301, '/');
 });
 
 app.use(express.static(PUBLIC_DIR, { index: false, dotfiles: 'deny' }));

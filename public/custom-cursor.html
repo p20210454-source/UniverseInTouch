@@ -1,0 +1,197 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UniverseInTouch — Custom Cursor</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Crimson+Pro:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/custom-cursor-page.css">
+<link rel="stylesheet" href="/custom-cursor.css">
+</head>
+<body>
+
+<div id="cursor-dot" aria-hidden="true"></div>
+<div id="cursor-ring" aria-hidden="true"></div>
+<div id="cursor-text" aria-hidden="true">Read paper</div>
+<div class="cursor-badge" id="cursor-badge" aria-hidden="true">&#10022; Custom cursor active</div>
+
+<p class="demo-app-link"><a href="/">&#8592; Open full UniverseInTouch app</a></p>
+
+<header id="topbar">
+  <a href="/" class="topbar-brand" data-cursor-text="Home">Universe<span>InTouch</span></a>
+  <nav class="topbar-nav">
+    <a href="/" data-cursor-text="Browse">Browse</a>
+    <a href="/#search-page" data-cursor-text="Search">Search</a>
+    <a href="/#about-page" data-cursor-text="About">About</a>
+    <a href="/#install" data-cursor-text="Install">Install</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <span class="hero-tag">Academic research network</span>
+  <h1>Discover &amp; share <em>research</em></h1>
+  <p>Find publications, track citations, and connect with work in mathematics and related fields.</p>
+  <div class="hero-actions">
+    <a href="#papers" class="btn-primary magnet" data-cursor-text="Browse">Browse publications</a>
+    <a href="/#add-paper" class="btn-outline magnet" data-cursor-text="Submit">Add publication</a>
+  </div>
+</section>
+
+<div class="filter-bar">
+  <span class="filter-label">Field:</span>
+  <button type="button" class="filter-btn active">Mathematics</button>
+  <button type="button" class="filter-btn">Computer Science</button>
+  <button type="button" class="filter-btn">Physics</button>
+  <button type="button" class="filter-btn">Biology</button>
+</div>
+
+<div class="content-wrap" id="papers">
+  <div>
+    <div class="featured-paper" data-cursor-text="Read paper">
+      <span class="featured-label">&#9733; Featured paper</span>
+      <a href="#" class="paper-title">On the Convergence of Stochastic Gradient Descent with Adaptive Learning Rates in Non-Convex Optimization</a>
+      <div class="paper-authors">Zhang W., Patel R., Müller S., Okonkwo C.</div>
+      <p class="paper-abstract">We establish new convergence guarantees for stochastic gradient descent methods equipped with adaptive learning rates, proving O(1/&radic;T) convergence to first-order stationary points under mild smoothness assumptions. Our analysis unifies several popular algorithms including Adam, RMSProp, and Adagrad within a single theoretical framework, resolving long-standing questions about their asymptotic behavior in the non-convex regime. Experiments on large language model pretraining confirm the theoretical predictions.</p>
+      <div class="paper-footer">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;background:#e67e22;color:#fff;padding:3px 8px;border-radius:3px;">Math</span>
+        <span class="paper-access-open">Open Access</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,0.4);">Apr 2025</span>
+        <div class="paper-stats" style="margin-left:auto;">
+          <span class="stat-chip" style="color:rgba(255,255,255,0.35);">&#8593; 347 citations</span>
+          <span class="stat-chip" style="color:rgba(255,255,255,0.35);">4.2k reads</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="papers-grid">
+      <div class="paper-card" data-cursor-text="Read paper">
+        <div class="paper-meta">
+          <span class="paper-field">Math</span>
+          <span class="paper-date">Mar 2025</span>
+          <span class="paper-access-open">Open Access</span>
+        </div>
+        <a href="#" class="paper-title">Spectral Gaps in Random Matrix Ensembles and Their Connection to the Riemann Hypothesis</a>
+        <div class="paper-authors">Nakamura T., Bloch E., Ferreira A.</div>
+        <p class="paper-abstract">We explore deep connections between the eigenvalue statistics of random Hermitian matrices from the GUE and the non-trivial zeros of the Riemann zeta function, extending the Montgomery-Odlyzko law to a new class of L-functions over function fields.</p>
+        <div class="paper-footer">
+          <a href="#" class="paper-tag">Number Theory</a>
+          <a href="#" class="paper-tag">Random Matrices</a>
+          <a href="#" class="paper-tag">Spectral Theory</a>
+          <div class="paper-stats">
+            <span class="stat-chip">&#8593; 89</span>
+            <span class="stat-chip">1.1k reads</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="paper-card" data-cursor-text="Read paper">
+        <div class="paper-meta">
+          <span class="paper-field">Math</span>
+          <span class="paper-date">Feb 2025</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;padding:3px 8px;border-radius:3px;background:#d6eaf8;color:#1a5276;letter-spacing:1px;text-transform:uppercase;">Peer Reviewed</span>
+        </div>
+        <a href="#" class="paper-title">A New Proof of the Poincar&eacute; Conjecture via Geometric Flows in Higher Dimensions</a>
+        <div class="paper-authors">Osei K., Lindstr&ouml;m P., Pham Q.T.</div>
+        <p class="paper-abstract">Building on Perelman's seminal work, we present a simplified proof of the Poincar&eacute; conjecture using a novel monotonicity formula for the Ricci flow with surgery, extending the argument to characterize simply-connected compact 4-manifolds.</p>
+        <div class="paper-footer">
+          <a href="#" class="paper-tag">Topology</a>
+          <a href="#" class="paper-tag">Geometric Analysis</a>
+          <a href="#" class="paper-tag">Ricci Flow</a>
+          <div class="paper-stats">
+            <span class="stat-chip">&#8593; 214</span>
+            <span class="stat-chip">2.8k reads</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="paper-card" data-cursor-text="Read paper">
+        <div class="paper-meta">
+          <span class="paper-field">Math</span>
+          <span class="paper-date">Jan 2025</span>
+          <span class="paper-access-open">Open Access</span>
+        </div>
+        <a href="#" class="paper-title">Categorical Foundations of Homotopy Type Theory: A Unifying Perspective</a>
+        <div class="paper-authors">Dubois M., Al-Rashid F., Costa B.</div>
+        <p class="paper-abstract">We develop a comprehensive framework unifying homotopy type theory with &infin;-category theory, providing new models for dependent type systems and resolving open problems in the foundations of constructive mathematics.</p>
+        <div class="paper-footer">
+          <a href="#" class="paper-tag">Type Theory</a>
+          <a href="#" class="paper-tag">Category Theory</a>
+          <a href="#" class="paper-tag">Logic</a>
+          <div class="paper-stats">
+            <span class="stat-chip">&#8593; 61</span>
+            <span class="stat-chip">890 reads</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <aside class="sidebar-right">
+    <div class="widget-card">
+      <div class="widget-head"><h3>Trending this week</h3></div>
+      <div class="widget-body">
+        <div class="trending-item">
+          <div class="trending-rank">#1 &mdash; 4.2k reads</div>
+          <div class="trending-title">SGD Convergence with Adaptive Rates</div>
+          <div class="trending-meta">Zhang W. et al. &middot; 2025</div>
+        </div>
+        <div class="trending-item">
+          <div class="trending-rank">#2 &mdash; 2.8k reads</div>
+          <div class="trending-title">Poincar&eacute; Conjecture via Geometric Flows</div>
+          <div class="trending-meta">Osei K. et al. &middot; 2025</div>
+        </div>
+        <div class="trending-item">
+          <div class="trending-rank">#3 &mdash; 1.1k reads</div>
+          <div class="trending-title">Spectral Gaps &amp; Riemann Hypothesis</div>
+          <div class="trending-meta">Nakamura T. et al. &middot; 2025</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="widget-card">
+      <div class="widget-head"><h3>Popular topics</h3></div>
+      <div class="widget-body">
+        <div class="tag-cloud">
+          <span class="tag-pill">Number Theory</span>
+          <span class="tag-pill">Topology</span>
+          <span class="tag-pill">Optimization</span>
+          <span class="tag-pill">Algebra</span>
+          <span class="tag-pill">PDEs</span>
+          <span class="tag-pill">Combinatorics</span>
+          <span class="tag-pill">Logic</span>
+          <span class="tag-pill">Analysis</span>
+          <span class="tag-pill">Geometry</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="widget-card">
+      <div class="widget-head"><h3>Repository stats</h3></div>
+      <div class="widget-body">
+        <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--border)">
+          <span style="font-size:14px;color:var(--muted)">Total Papers</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600">12</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--border)">
+          <span style="font-size:14px;color:var(--muted)">Open Access</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:#27ae60">83%</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:7px 0">
+          <span style="font-size:14px;color:var(--muted)">Avg Citations</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:var(--gold)">178</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<footer>
+  <div class="footer-brand">Universe<span style="color:var(--gold)">InTouch</span></div>
+  <p>Open-access academic paper repository &middot; Built for Blogger &middot; <a href="https://github.com/p20210454-source/UniverseInTouch" target="_blank" rel="noopener">GitHub</a></p>
+  <p style="margin-top:8px;font-size:12px;">CC BY 4.0 &mdash; Free to use, share, and adapt with attribution</p>
+</footer>
+
+<script src="/custom-cursor.js" defer></script>
+</body>
+</html>

@@ -1,17 +1,10 @@
-﻿var papers = [];
+﻿/* Admin panel — requires site-common.js */
+var UIT = window.UIT;
+
+var papers = [];
 var categories = [];
 var siteStats = null;
 var siteSettings = {};
-
-function escapeHTML(str) {
-  if (!str) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
 
 var currentFilter = 'math';
 var visibleCount = 5;
@@ -20,22 +13,13 @@ var browseLoading = false;
 var isAdmin = false;
 var csrfToken = null;
 var pendingAdminPage = null;
+var editingPaperId = null;
 
 var SITE_NAME = 'UniverseInTouch';
 var LEGACY_SITE_NAMES = { ResearchHub: true, CosmoCause: true };
 
-var ALLOWED_PAGE_IDS = ['home','search-page','about-page','paper-view','admin-page','add-paper','manage','categories','analytics','install','settings'];
-var ADMIN_PAGE_IDS = ['admin-page','add-paper','manage','categories','analytics','install','settings'];
-
-function fieldClass(f) {
-  return { math: 'paper-field-math' }[f] || 'paper-field-default';
-}
-function accessClass(a) {
-  return { open: 'paper-access-open', peer: 'paper-access-peer' }[a] || 'paper-access-default';
-}
-function accessLabel(a) {
-  return a === 'open' ? 'Open Access' : 'Peer Reviewed';
-}
+var ALLOWED_PAGE_IDS = ['admin-page', 'add-paper', 'manage', 'categories', 'analytics', 'install', 'settings'];
+var ADMIN_PAGE_IDS = ALLOWED_PAGE_IDS.slice();
 
 // ========== API SERVICE ==========
 async function apiFetch(url, options = {}) {
@@ -64,7 +48,7 @@ async function apiFetch(url, options = {}) {
     }
     return await res.json();
   } catch (err) {
-    showToast('Error: ' + err.message);
+    UIT.showToast('Error: ' + err.message);
     return null;
   }
 }
@@ -110,7 +94,7 @@ async function adminLogin() {
   var username = document.getElementById('admin-username').value.trim();
   var password = document.getElementById('admin-password').value;
   if (!username || !password) {
-    showToast('Enter username and password');
+    UIT.showToast('Enter username and password');
     return false;
   }
   var res = await fetch('/api/auth/login', {
@@ -120,7 +104,7 @@ async function adminLogin() {
     body: JSON.stringify({ username: username, password: password }),
   });
   if (!res.ok) {
-    showToast('Invalid username or password');
+    UIT.showToast('Invalid username or password');
     return false;
   }
   var loginData = await res.json().catch(function () { return {}; });
@@ -133,7 +117,7 @@ async function adminLogin() {
   pendingAdminPage = null;
   await refreshAdminData(true);
   showPage(nextPage);
-  showToast('Signed in as ' + username);
+  UIT.showToast('Signed in as ' + username);
   return true;
 }
 async function adminLogout() {
@@ -141,7 +125,7 @@ async function adminLogout() {
   isAdmin = false;
   csrfToken = null;
   updateAdminLogoutUi();
-  showToast('Signed out');
+  UIT.showToast('Signed out');
 }
 function updateAdminLogoutUi() {
   var btn = document.getElementById('admin-logout-btn');
@@ -165,9 +149,10 @@ async function loadInitialData() {
     siteSettings = settingsData;
     applySettingsToUI();
   }
-  await fetchBrowseList();
-  renderHome();
-  bindTagCloudClicks();
+  var dash = document.getElementById('admin-page');
+  if (dash && dash.classList.contains('active')) {
+    if (isAdmin) loadAdminDashboard();
+  }
 }
 
 async function fetchStats() {
@@ -220,8 +205,6 @@ function applySettingsToUI() {
     var key = map[id];
     if (el && siteSettings[key] !== undefined) el.value = siteSettings[key];
   });
-  var tag = document.querySelector('.hero-tag');
-  if (tag && siteSettings.tagline) tag.textContent = siteSettings.tagline;
   applyBrandToUI(siteSettings.blogTitle || SITE_NAME);
   if (siteSettings.papersPerPage) {
     visibleCount = Math.min(parseInt(siteSettings.papersPerPage, 10) || 5, 50);
@@ -238,7 +221,6 @@ function applyStatsToUI() {
     ? siteStats.publishedCount
     : siteStats.totalPapers;
   set('stat-total', published);
-  set('sidebar-total', published);
   set('m-total', published);
   set('m-views', Number(siteStats.totalViews || 0).toLocaleString());
   set('m-citations', Number(siteStats.totalCitations || 0).toLocaleString());
@@ -251,6 +233,12 @@ function applyStatsToUI() {
   set('sidebar-open-pct', (siteStats.openAccessPercent || 0) + '%');
   set('sidebar-peer-pct', (siteStats.peerReviewedPercent || 0) + '%');
   set('sidebar-avg-citations', siteStats.avgCitations || '0');
+  var aboutPapers = document.getElementById('about-paper-count');
+  if (aboutPapers) aboutPapers.textContent = published != null ? String(published) : '—';
+  var aboutFields = document.getElementById('about-field-count');
+  if (aboutFields && siteStats.viewsByField) {
+    aboutFields.textContent = String(siteStats.viewsByField.length);
+  }
   set('a-total-views', Number(siteStats.totalViews || 0).toLocaleString());
   set('a-total-citations', Number(siteStats.totalCitations || 0).toLocaleString());
   set('a-subscribers', siteStats.subscribers || 0);
@@ -271,10 +259,10 @@ function renderViewsByField(el, rows, emptyText) {
   categories.forEach(function (c) { catBySlug[c.slug] = c; });
   el.innerHTML = rows.map(function (r) {
     var cat = catBySlug[r.field];
-    var label = cat ? cat.name : fieldName(r.field);
+    var label = cat ? cat.name : UIT.fieldName(r.field, categories);
     var pct = Math.round((r.views / max) * 100);
     return '<div class="dash-bar-row">' +
-      '<span class="dash-bar-label">' + escapeHTML(label) + '</span>' +
+      '<span class="dash-bar-label">' + UIT.escapeHTML(label) + '</span>' +
       '<div class="dash-bar-track"><div class="dash-bar-fill" style="width:' + pct + '%"></div></div>' +
       '<span class="dash-bar-val">' + r.views + '</span></div>';
   }).join('');
@@ -304,61 +292,16 @@ async function refreshAdminData(forceRender) {
   return data;
 }
 
-async function fetchBrowseList() {
-  const params = new URLSearchParams({
-    field: currentFilter,
-    limit: String(visibleCount),
-    offset: '0',
-  });
-  const data = await apiFetch('/api/papers/browse?' + params.toString());
-  if (!data) return false;
-  homeBrowse.papers = data.papers || [];
-  homeBrowse.featured = data.featured || null;
-  homeBrowse.total = data.total || 0;
-  homeBrowse.papers.forEach(function (p) {
-    var i = papers.findIndex(function (x) { return x.id === p.id; });
-    if (i >= 0) papers[i] = p;
-    else papers.push(p);
-  });
-  if (homeBrowse.featured) {
-    var fi = papers.findIndex(function (x) { return x.id === homeBrowse.featured.id; });
-    if (fi >= 0) papers[fi] = homeBrowse.featured;
-    else papers.push(homeBrowse.featured);
-  }
-  return true;
-}
-
-async function browsePapers() {
-  if (browseLoading) return;
-  browseLoading = true;
-  var btn = document.getElementById('browse-papers-btn');
-  if (btn) {
-    btn.setAttribute('aria-busy', 'true');
-    btn.style.opacity = '0.7';
-  }
-  var grid = document.getElementById('papers-grid');
-  showPage('home');
-  if (grid) {
-    grid.innerHTML = '<p style="text-align:center;padding:32px;color:var(--muted)">Loading papers from server…</p>';
-  }
-  visibleCount = 5;
-  const ok = await fetchBrowseList();
-  browseLoading = false;
-  if (btn) {
-    btn.removeAttribute('aria-busy');
-    btn.style.opacity = '';
-  }
-  if (ok) {
-    renderHome();
-    showToast('Loaded ' + homeBrowse.total + ' paper' + (homeBrowse.total === 1 ? '' : 's'));
-  }
+function browsePapers() {
+  window.location.href = '/';
 }
 
 
 // ========== NAVIGATION ==========
 function openAdminPanel() {
-  toggleSidebar();
   showPage('admin-page');
+  var sidebar = document.getElementById('admin-sidebar');
+  if (sidebar && !sidebar.classList.contains('open')) toggleSidebar();
 }
 
 function pageIdFromHash(hash) {
@@ -370,8 +313,8 @@ function pageIdFromHash(hash) {
 }
 
 function applyHashRoute() {
-  var id = pageIdFromHash(location.hash);
-  if (id) showPage(id);
+  var id = pageIdFromHash(location.hash) || 'admin-page';
+  showPage(id);
 }
 
 function showPage(id) {
@@ -405,7 +348,6 @@ function showPage(id) {
       history.replaceState(null, '', location.pathname + location.search);
     } catch (e) { /* ignore */ }
   }
-  if (id === 'home') renderHome();
   if (id === 'manage') loadAdminPapers();
   if (id === 'admin-page') loadAdminDashboard();
   if (id === 'categories') loadCategories();
@@ -426,225 +368,16 @@ function toggleSidebar() {
   document.getElementById('overlay').classList.toggle('show');
 }
 function closeSidebar() {
+  if (document.body.classList.contains('admin-site') && window.matchMedia('(min-width: 900px)').matches) {
+    return;
+  }
   document.getElementById('admin-sidebar').classList.remove('open');
   document.getElementById('overlay').classList.remove('show');
 }
 
-// ========== RENDER HOME ==========
-function renderHome() {
-  renderFeatured();
-  renderPapers();
-  renderTrending();
-  renderTags();
-  if (siteStats) applyStatsToUI();
-}
-
-function renderFeatured() {
-  var fp = homeBrowse.featured || papers.find(p => p.featured);
-  var el = document.getElementById('featured-section');
-  if (!fp || !el) return;
-  el.innerHTML = `
-    <div class="featured-paper" data-open-paper="${fp.id}" role="button" tabindex="0">
-      <span class="featured-label">Featured publication</span>
-      <div class="paper-meta">
-        <span class="paper-field ${fieldClass(fp.field)}">${escapeHTML(fieldName(fp.field))}</span>
-        <span class="paper-access ${accessClass(fp.access)}">${accessLabel(fp.access)}</span>
-        <span class="paper-date">${formatDate(fp.date)}</span>
-      </div>
-      <a class="paper-title">${escapeHTML(fp.title)}</a>
-      <p class="paper-authors">${escapeHTML(fp.authors)}</p>
-      <p class="paper-abstract">${fp.abstract ? escapeHTML(fp.abstract.substring(0, 220)) + '...' : ''}</p>
-      <div class="paper-footer">
-        ${fp.tags.map(t=>`<span class="paper-tag">${escapeHTML(t)}</span>`).join('')}
-        <div class="paper-stats" style="margin-left:auto">
-          <span class="stat-chip">${escapeHTML(fp.journal)}</span>
-          <span class="stat-chip">${fp.citations.toLocaleString()} citations</span>
-        </div>
-      </div>
-    </div>`;
-}
-
-function getPapersFiltered() {
-  if (homeBrowse.papers.length || homeBrowse.total > 0) {
-    return homeBrowse.papers;
-  }
-  var list = currentFilter === 'all' ? papers : papers.filter(p => p.field === currentFilter);
-  return list.filter(p => !p.featured);
-}
-
-function renderPapers() {
-  var grid = document.getElementById('papers-grid');
-  if (!grid) return;
-  var filtered = getPapersFiltered();
-  if (!filtered.length && homeBrowse.total === 0) {
-    grid.innerHTML = '<p style="text-align:center;padding:32px;color:var(--muted)">No papers in this field yet. Submit research or try another filter.</p>';
-  } else {
-    grid.innerHTML = filtered.map(p => paperCardHTML(p)).join('');
-  }
-  var btn = document.getElementById('load-more-btn');
-  if (btn) btn.style.display = homeBrowse.total > filtered.length ? 'inline-block' : 'none';
-}
-
-function paperCardHTML(p) {
-  return `<div class="paper-card" data-open-paper="${p.id}" role="button" tabindex="0">
-    <div class="paper-meta">
-      <span class="paper-field ${fieldClass(p.field)}">${escapeHTML(fieldName(p.field))}</span>
-      <span class="paper-access ${accessClass(p.access)}">${accessLabel(p.access)}</span>
-      <span class="paper-date">${formatDate(p.date)}</span>
-    </div>
-    <a class="paper-title">${escapeHTML(p.title)}</a>
-    <p class="paper-authors">${escapeHTML(p.authors)}</p>
-    <p class="paper-abstract paper-abstract-preview">${escapeHTML(p.abstract)}</p>
-    <div class="paper-footer">
-      ${p.tags.slice(0,4).map(t=>`<a class="paper-tag">${escapeHTML(t)}</a>`).join('')}
-      <div class="paper-stats">
-        <span class="stat-chip">${escapeHTML(p.journal)}</span>
-        <span class="stat-chip">${p.citations.toLocaleString()} citations</span>
-        <span class="stat-chip">${p.views} views</span>
-      </div>
-    </div>
-  </div>`;
-}
-
-async function renderTrending() {
-  var el = document.getElementById('trending-widget');
-  if (!el) return;
-  var sorted = await apiFetch('/api/papers/trending?limit=5');
-  if (!sorted || !sorted.length) {
-    sorted = [...papers].sort((a, b) => b.views - a.views).slice(0, 5);
-  }
-  el.innerHTML = sorted.map((p, i) => `<div class="trending-item">
-    <div class="trending-rank">#${i + 1}</div>
-    <div class="trending-title" role="button" tabindex="0" data-paper-id="${p.id}">${escapeHTML(p.title)}</div>
-    <div class="trending-meta">${p.views} views · ${p.citations} citations</div>
-  </div>`).join('');
-  el.querySelectorAll('[data-paper-id]').forEach(function (node) {
-    node.addEventListener('click', function () {
-      openPaper(parseInt(node.getAttribute('data-paper-id'), 10));
-    });
-  });
-}
-
-async function renderTags() {
-  var el = document.getElementById('tag-cloud');
-  if (!el) return;
-  var tagList = await apiFetch('/api/papers/tags');
-  if (!tagList) return;
-  el.innerHTML = tagList.slice(0, 18).map(function (t) {
-    return `<button type="button" class="tag-pill" data-tag="${escapeHTML(t.name)}">${escapeHTML(t.name)} <span style="color:var(--accent)">${t.count}</span></button>`;
-  }).join('');
-  bindTagCloudClicks();
-}
-
-function bindTagCloudClicks() {
-  var el = document.getElementById('tag-cloud');
-  if (!el || el._tagBound) return;
-  el._tagBound = true;
-  el.addEventListener('click', function (e) {
-    var btn = e.target.closest('[data-tag]');
-    if (btn) searchByTag(btn.getAttribute('data-tag'));
-  });
-}
-
-// ========== PAPER VIEW ==========
-async function openPaper(id) {
-  var p = papers.find(function (x) { return x.id === id; });
-  if (!p) {
-    var url = isAdmin ? '/api/admin/papers/' + id : '/api/papers/' + id;
-    var fetched = await apiFetch(url);
-    if (!fetched) return;
-    p = fetched;
-    papers.push(p);
-  }
-
-  if (p.status === 'published') {
-    await apiFetch('/api/papers/' + id + '/view', { method: 'POST' });
-  }
-  p.views = (p.views || 0) + 1;
-  
-  document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
-  document.getElementById('paper-view').classList.add('active');
-  var refs = (p.refs || []).map(r => `<li>${escapeHTML(r)}</li>`).join('');
-  document.getElementById('paper-view-content').innerHTML = `
-    <button type="button" class="back-btn" data-action="show-page" data-page="home">← Back to Papers</button>
-    <div class="paper-meta" style="margin-bottom:16px">
-      <span class="paper-field ${fieldClass(p.field)}">${escapeHTML(fieldName(p.field))}</span>
-      <span class="paper-access ${accessClass(p.access)}">${accessLabel(p.access)}</span>
-    </div>
-    <h1 class="paper-full-title">${escapeHTML(p.title)}</h1>
-    <p style="font-size:17px;color:var(--muted);font-style:italic;margin-bottom:8px">By ${escapeHTML(p.authors)}</p>
-    <div class="paper-info-bar">
-      <div class="info-item"><div class="info-label">Journal</div><div class="info-val">${escapeHTML(p.journal)}</div></div>
-      <div class="info-item"><div class="info-label">Published</div><div class="info-val">${formatDate(p.date)}</div></div>
-      <div class="info-item"><div class="info-label">DOI / ID</div><div class="info-val" style="font-family:'JetBrains Mono',monospace;font-size:12px">${escapeHTML(p.doi)}</div></div>
-      <div class="info-item"><div class="info-label">Citations</div><div class="info-val">${p.citations.toLocaleString()}</div></div>
-    </div>
-    <div class="section-heading">Abstract</div>
-    <div class="abstract-text">${escapeHTML(p.abstract)}</div>
-    <div class="section-heading">Full Text</div>
-    <div class="paper-body-text">${(p.body||'').split('\n\n').map(par=>`<p>${escapeHTML(par)}</p>`).join('')}</div>
-    <div class="section-heading">Keywords</div>
-    <div class="tag-cloud" style="margin-bottom:24px">${p.tags.map(t=>`<button class="tag-pill">${escapeHTML(t)}</button>`).join('')}</div>
-    ${refs ? `<div class="section-heading">References</div><ul class="references-list">${refs}</ul>` : ''}
-    <div class="section-heading">Cite This Paper</div>
-    <div class="citation-box"><button type="button" class="copy-cite-btn" data-copy-cite="${p.id}">Copy</button>${escapeHTML(p.authors)} (${new Date(p.date).getFullYear()}). ${escapeHTML(p.title)}. <em>${escapeHTML(p.journal)}</em>. ${escapeHTML(p.doi)}</div>
-    <div style="display:flex;gap:12px;margin-top:24px;flex-wrap:wrap">
-      <a class="btn-primary" href="https://scholar.google.com/scholar?q=${encodeURIComponent(p.title)}" target="_blank">Google Scholar</a>
-      ${p.doi && p.doi.startsWith('arXiv') ? `<a class="btn-outline" style="color:var(--ink);border-color:var(--border)" href="https://arxiv.org/abs/${escapeHTML(p.doi.replace('arXiv:',''))}" target="_blank">View on arXiv</a>` : ''}
-    </div>`;
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-// ========== FILTER ==========
-async function filterPapers(field, btn) {
-  currentFilter = field;
-  visibleCount = 5;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  await fetchBrowseList();
-  renderPapers();
-  renderFeatured();
-}
-
-async function loadMore() {
-  visibleCount += 5;
-  await fetchBrowseList();
-  renderPapers();
-}
-
-// ========== SEARCH ==========
-function quickSearch(val) {
-  if (!val || val.length < 2) return;
-  showPage('search-page');
-  document.getElementById('main-search').value = val;
-  performSearch(val);
-}
-async function performSearch(query) {
-  var q = (query || document.getElementById('main-search').value).trim();
-  var el = document.getElementById('search-results');
-  if (!el) return;
-  if (!q) {
-    el.innerHTML = '<p style="color:var(--muted);padding:32px;text-align:center;">Enter a search term.</p>';
-    return;
-  }
-  el.innerHTML = '<p style="color:var(--muted);padding:32px;text-align:center;">Searching…</p>';
-  var params = new URLSearchParams({ field: 'all', q: q, limit: '50', offset: '0' });
-  var data = await apiFetch('/api/papers/browse?' + params.toString());
-  if (!data) return;
-  var results = data.papers || [];
-  results.forEach(function (p) {
-    var i = papers.findIndex(function (x) { return x.id === p.id; });
-    if (i >= 0) papers[i] = p;
-    else papers.push(p);
-  });
-  el.innerHTML = results.length
-    ? results.map(function (p) { return paperCardHTML(p); }).join('')
-    : '<p style="color:var(--muted);padding:32px;text-align:center;font-size:18px;">No papers found for "' + escapeHTML(q) + '"</p>';
-}
-function searchByTag(tag) {
-  showPage('search-page');
-  document.getElementById('main-search').value = tag;
-  performSearch(tag);
+// ========== PUBLIC PAPER VIEW (opens public site) ==========
+function openPaper(id) {
+  window.open(UIT.paperUrl(id), '_blank', 'noopener,noreferrer');
 }
 
 // ========== ADMIN: ADD PAPER ==========
@@ -663,7 +396,7 @@ async function addPaper() {
   var title = document.getElementById('f-title').value.trim();
   var authors = document.getElementById('f-authors').value.trim();
   var date = document.getElementById('f-date').value;
-  if (!title || !authors) { showToast('Please fill in required fields (Title, Authors)'); return; }
+  if (!title || !authors) { UIT.showToast('Please fill in required fields (Title, Authors)'); return; }
   
   var paperData = {
     featured: document.getElementById('f-featured').value === 'yes',
@@ -689,10 +422,9 @@ async function addPaper() {
     if (paperData.featured) papers.forEach(function (p) { p.featured = false; });
     papers.unshift(savedPaper);
     clearForm();
-    await fetchBrowseList();
     await refreshAdminData();
-    showToast('Paper published successfully!');
-    setTimeout(function () { showPage('home'); }, 1000);
+    UIT.showToast('Paper published successfully!');
+    setTimeout(function () { showPage('manage'); }, 1000);
   }
 }
 
@@ -701,7 +433,7 @@ async function saveDraft() {
   var title = document.getElementById('f-title').value.trim();
   var authors = document.getElementById('f-authors').value.trim();
   if (!title || !authors) {
-    showToast('Title and authors required for a draft');
+    UIT.showToast('Title and authors required for a draft');
     return;
   }
   var paperData = {
@@ -724,12 +456,12 @@ async function saveDraft() {
   if (saved) {
     papers.unshift(saved);
     await refreshAdminData();
-    showToast('Draft saved to server.');
+    UIT.showToast('Draft saved to server.');
   }
 }
 
 function clearForm() {
-  ['f-title','f-authors','f-date','f-journal','f-doi','f-abstract','f-body','f-tags','f-refs','f-pdf','f-citations'].forEach(id => {
+  ['f-title','f-authors','f-date','f-journal','f-doi','f-abstract','f-body','f-tags','f-refs','f-citations'].forEach(id => {
     var el = document.getElementById(id);
     if (el) el.value = '';
   });
@@ -745,14 +477,14 @@ function renderManage() {
     <th>Title</th><th>Authors</th><th>Field</th><th>Date</th><th>Status</th><th>Views</th><th>Actions</th>
   </tr></thead><tbody>` +
   papers.map(p => `<tr>
-    <td style="max-width:280px"><strong style="font-size:13px">${escapeHTML(p.title.substring(0,60))}${p.title.length>60?'...':''}</strong></td>
-    <td style="font-size:13px;color:var(--muted)">${escapeHTML(p.authors.substring(0,30))}...</td>
-    <td><span class="paper-field ${fieldClass(p.field)}" style="font-size:9px">${escapeHTML(fieldName(p.field))}</span></td>
-    <td style="font-family:'JetBrains Mono',monospace;font-size:11px;white-space:nowrap">${formatDate(p.date)}</td>
-    <td><span class="status-dot ${statusDotClass(p.status)}"></span><span style="font-size:12px">${escapeHTML(p.status || 'published')}</span></td>
+    <td style="max-width:280px"><strong style="font-size:13px">${UIT.escapeHTML(p.title.substring(0,60))}${p.title.length>60?'...':''}</strong></td>
+    <td style="font-size:13px;color:var(--muted)">${UIT.escapeHTML(p.authors.substring(0,30))}...</td>
+    <td><span class="paper-field ${UIT.fieldClass(p.field)}" style="font-size:9px">${UIT.escapeHTML(UIT.fieldName(p.field, categories))}</span></td>
+    <td style="font-family:'JetBrains Mono',monospace;font-size:11px;white-space:nowrap">${UIT.formatDate(p.date)}</td>
+    <td><span class="status-dot ${statusDotClass(p.status)}"></span><span style="font-size:12px">${UIT.escapeHTML(p.status || 'published')}</span></td>
     <td style="font-family:'JetBrains Mono',monospace;font-size:12px">${p.views}</td>
     <td>
-      <button type="button" class="action-btn" data-open-paper="${p.id}">View</button>
+      <a class="action-btn" href="${UIT.paperUrl(p.id)}" target="_blank" rel="noopener noreferrer">View</a>
       <button type="button" class="action-btn danger" data-delete-paper="${p.id}">Delete</button>
     </td>
   </tr>`).join('') + '</tbody>';
@@ -765,10 +497,9 @@ async function deletePaper(id) {
   const res = await apiFetch(`/api/papers/${id}`, { method: 'DELETE' });
   if (res) {
     papers = papers.filter(function (p) { return p.id !== id; });
-    await fetchBrowseList();
     await refreshAdminData();
     renderManage();
-    showToast('Paper deleted.');
+    UIT.showToast('Paper deleted.');
   }
 }
 
@@ -782,7 +513,7 @@ function formatRelativeTime(iso) {
   if (sec < 3600) return Math.floor(sec / 60) + ' min ago';
   if (sec < 86400) return Math.floor(sec / 3600) + ' hr ago';
   if (sec < 604800) return Math.floor(sec / 86400) + ' days ago';
-  return formatDate(iso);
+  return UIT.formatDate(iso);
 }
 
 function statusDotClass(status) {
@@ -793,7 +524,7 @@ function statusDotClass(status) {
 async function loadAdminDashboard() {
   if (!(await ensureAdmin())) return;
   var data = await refreshAdminData(true);
-  if (!data) showToast('Could not load dashboard — try signing in again.');
+  if (!data) UIT.showToast('Could not load dashboard — try signing in again.');
 }
 
 function renderAdminDashboard(d) {
@@ -813,7 +544,6 @@ function renderAdminDashboard(d) {
   set('m-peer-pct', d.peerReviewedPercent + '% peer reviewed');
   set('m-categories', (d.categoryCount || 0) + ' categories');
   set('stat-total', d.publishedCount);
-  set('sidebar-total', d.publishedCount);
 
   renderViewsByField(
     document.getElementById('dash-field-chart'),
@@ -827,9 +557,9 @@ function renderAdminDashboard(d) {
       var fp = d.featuredPaper;
       featEl.innerHTML =
         '<div class="dash-featured">' +
-        '<div class="dash-featured-label">â­ Featured on homepage</div>' +
-        '<div class="dash-featured-title">' + escapeHTML(fp.title) + '</div>' +
-        '<div class="dash-featured-meta">' + escapeHTML(fp.authors) + ' · ' + formatDate(fp.date) + ' · ' + (fp.views || 0) + ' views</div>' +
+        '<div class="dash-featured-label">Featured on homepage</div>' +
+        '<div class="dash-featured-title">' + UIT.escapeHTML(fp.title) + '</div>' +
+        '<div class="dash-featured-meta">' + UIT.escapeHTML(fp.authors) + ' · ' + UIT.formatDate(fp.date) + ' · ' + (fp.views || 0) + ' views</div>' +
         '<button type="button" class="action-btn" data-paper-id="' + fp.id + '">View paper</button></div>';
       featEl.querySelector('[data-paper-id]').addEventListener('click', function () {
         openPaper(fp.id);
@@ -846,8 +576,8 @@ function renderAdminDashboard(d) {
       topEl.innerHTML =
         '<div class="dash-featured" style="border-left-color:var(--gold)">' +
         '<div class="dash-featured-label">Most viewed</div>' +
-        '<div class="dash-featured-title">' + escapeHTML(tp.title) + '</div>' +
-        '<div class="dash-featured-meta">' + Number(tp.views).toLocaleString() + ' views · ' + escapeHTML(tp.authors || '') + '</div>' +
+        '<div class="dash-featured-title">' + UIT.escapeHTML(tp.title) + '</div>' +
+        '<div class="dash-featured-meta">' + Number(tp.views).toLocaleString() + ' views · ' + UIT.escapeHTML(tp.authors || '') + '</div>' +
         '<button type="button" class="action-btn" data-top-id="' + tp.id + '">Open</button></div>';
       topEl.querySelector('[data-top-id]').addEventListener('click', function () {
         openPaper(tp.id);
@@ -866,10 +596,10 @@ function renderAdminDashboard(d) {
       table.innerHTML = '<thead><tr><th>Title</th><th>Field</th><th>Views</th><th>Status</th><th></th></tr></thead><tbody>' +
         recent.map(function (p) {
           return '<tr>' +
-            '<td style="max-width:220px;font-size:13px"><strong>' + escapeHTML(p.title.substring(0, 45)) + (p.title.length > 45 ? '…' : '') + '</strong></td>' +
-            '<td><span class="paper-field ' + fieldClass(p.field) + '" style="font-size:9px">' + escapeHTML(fieldName(p.field)) + '</span></td>' +
+            '<td style="max-width:220px;font-size:13px"><strong>' + UIT.escapeHTML(p.title.substring(0, 45)) + (p.title.length > 45 ? '…' : '') + '</strong></td>' +
+            '<td><span class="paper-field ' + UIT.fieldClass(p.field) + '" style="font-size:9px">' + UIT.escapeHTML(UIT.fieldName(p.field, categories)) + '</span></td>' +
             '<td style="font-family:\'JetBrains Mono\',monospace;font-size:12px">' + (p.views || 0) + '</td>' +
-            '<td><span class="status-dot ' + statusDotClass(p.status) + '"></span><span style="font-size:12px">' + escapeHTML(p.status || 'published') + '</span></td>' +
+            '<td><span class="status-dot ' + statusDotClass(p.status) + '"></span><span style="font-size:12px">' + UIT.escapeHTML(p.status || 'published') + '</span></td>' +
             '<td><button type="button" class="action-btn" data-recent-id="' + p.id + '">View</button></td>' +
             '</tr>';
         }).join('') + '</tbody>';
@@ -892,7 +622,7 @@ function renderAdminDashboard(d) {
         var iconClass = item.type === 'edit' ? 'edit' : 'add';
         return '<div class="activity-item clickable" data-activity-id="' + item.paperId + '" role="button" tabindex="0">' +
           '<div class="activity-icon ' + iconClass + '">' + (icons[item.type] || '·') + '</div>' +
-          '<div><div class="activity-text">' + escapeHTML(item.text) + '</div>' +
+          '<div><div class="activity-text">' + UIT.escapeHTML(item.text) + '</div>' +
           '<div class="activity-time">' + formatRelativeTime(item.at) + '</div></div></div>';
       }).join('');
       actEl.querySelectorAll('[data-activity-id]').forEach(function (row) {
@@ -918,7 +648,7 @@ function renderCategories() {
     var safeColor = /^#[0-9A-Fa-f]{6}$/.test(c.color) ? c.color : '#c0392b';
     return `<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px dashed var(--border)">
     <span style="width:14px;height:14px;border-radius:50%;background:${safeColor};display:inline-block;flex-shrink:0"></span>
-    <span style="flex:1;font-size:15px">${escapeHTML(c.name)}</span>
+    <span style="flex:1;font-size:15px">${UIT.escapeHTML(c.name)}</span>
     <button type="button" class="action-btn danger" data-cat-id="${c.id}">×</button>
   </div>`;
   }).join('');
@@ -943,7 +673,7 @@ async function addCategory() {
     document.getElementById('cat-name').value = '';
     renderCategories();
     await refreshAdminData();
-    showToast('Category added!');
+    UIT.showToast('Category added!');
   }
 }
 
@@ -954,7 +684,7 @@ async function deleteCategory(id) {
     categories = categories.filter(function (c) { return c.id !== id; });
     renderCategories();
     await refreshAdminData();
-    showToast('Category removed.');
+    UIT.showToast('Category removed.');
   }
 }
 
@@ -991,9 +721,8 @@ async function saveSettings() {
   if (data) {
     siteSettings = data;
     applySettingsToUI();
-    await fetchBrowseList();
     await refreshAdminData();
-    showToast('Settings saved to server.');
+    UIT.showToast('Settings saved to server.');
   }
 }
 
@@ -1001,7 +730,7 @@ async function subscribeNewsletter() {
   var input = document.getElementById('newsletter-email');
   var email = input && input.value.trim();
   if (!email) {
-    showToast('Please enter your email.');
+    UIT.showToast('Please enter your email.');
     return;
   }
   var res = await apiFetch('/api/subscribers', {
@@ -1011,46 +740,30 @@ async function subscribeNewsletter() {
   if (res) {
     input.value = '';
     await fetchStats();
-    showToast('Subscribed! You\'ll receive weekly digests.');
+    UIT.showToast('Subscribed! You\'ll receive weekly digests.');
   }
 }
 
 // ========== HELPERS ==========
-function fieldName(f) {
-  var c = categories.find(function (x) { return x.slug === f; });
-  if (c) return c.name;
-  return { math: 'Mathematics' }[f] || f;
-}
-function formatDate(d) {
-  if (!d) return '';
-  return new Date(d).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
-}
 function updateStats() {
   if (siteStats) applyStatsToUI();
   else {
-    var els = ['stat-total', 'sidebar-total', 'm-total'];
+    var els = ['stat-total', 'm-total'];
     els.forEach(function (id) {
       var el = document.getElementById(id);
       if (el) el.textContent = papers.length;
     });
   }
 }
-function showToast(msg) {
-  var t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
 function copyCitation(id) {
-  var p = papers.find(x => x.id === id);
-  if (!p) return;
-  var text = `${p.authors} (${new Date(p.date).getFullYear()}). ${p.title}. ${p.journal}. ${p.doi}`;
-  navigator.clipboard.writeText(text).then(() => showToast('Citation copied to clipboard!')).catch(() => showToast('Please copy manually.'));
+  var p = papers.find(function (x) { return x.id === id; });
+  if (p) UIT.copyCitation(p);
 }
 function copyInstall() {
-  showToast('Install code copied!');
+  UIT.showToast('Install code copied!');
 }
 function copyCSS() {
-  showToast('CSS code copied!');
+  UIT.showToast('CSS code copied!');
 }
 
 function bindUiActions() {
@@ -1076,13 +789,13 @@ function bindUiActions() {
     if (action === 'show-page') {
       e.preventDefault();
       showPage(actionEl.getAttribute('data-page'));
-    } else if (action === 'close-sidebar') closeSidebar();
+    }     else if (action === 'close-sidebar') closeSidebar();
+    else if (action === 'toggle-sidebar') toggleSidebar();
     else if (action === 'open-admin') openAdminPanel();
-    else if (action === 'browse-papers') { e.preventDefault(); browsePapers(); }
-    else if (action === 'filter-papers') filterPapers(actionEl.getAttribute('data-field'), actionEl);
-    else if (action === 'load-more') loadMore();
-    else if (action === 'subscribe') subscribeNewsletter();
-    else if (action === 'perform-search') performSearch();
+    else if (action === 'browse-papers') {
+      e.preventDefault();
+      browsePapers();
+    }
     else if (action === 'add-paper') addPaper();
     else if (action === 'save-draft') saveDraft();
     else if (action === 'clear-form') clearForm();
@@ -1099,19 +812,30 @@ function bindUiActions() {
 }
 
 // ========== INIT ==========
+if (!window.UIT) {
+  console.error('site-common.js must load before app.js');
+} else {
+  UIT = window.UIT;
+}
 bindUiActions();
+var loginForm = document.getElementById('admin-login-form');
+if (loginForm) loginForm.addEventListener('submit', adminLoginSubmit);
 document.querySelectorAll('.sidebar-link[data-page]').forEach(function (a) {
   a.addEventListener('click', function (e) {
     e.preventDefault();
     showPage(a.getAttribute('data-page'));
   });
 });
-document.getElementById('admin-logout-btn').addEventListener('click', function (e) {
-  e.preventDefault();
-  adminLogout();
-});
+var logoutBtn = document.getElementById('admin-logout-btn');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    adminLogout();
+  });
+}
 applyBrandToUI(SITE_NAME);
-checkAuth().then(function () {
+checkAuth().then(function (ok) {
+  if (!ok) showAdminLogin();
   applyHashRoute();
 });
 window.addEventListener('hashchange', applyHashRoute);

@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="UniverseInTouch — open-access academic paper repository. Discover, share, and cite research publications.">
+<meta name="theme-color" content="#0d0d0d">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="/">
+<title>UniverseInTouch — Academic Research Website</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Crimson+Pro:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/website.css">
+<link rel="stylesheet" href="/custom-cursor.css">
+</head>
+<body data-page="home">
+
+<div id="cursor-dot" aria-hidden="true"></div>
+<div id="cursor-ring" aria-hidden="true"></div>
+<div id="cursor-text" aria-hidden="true">Read paper</div>
+
+<header id="topbar">
+  <a href="/" class="topbar-brand" data-cursor-text="Home">Universe<span>InTouch</span></a>
+  <nav class="topbar-nav">
+    <a href="/#papers" class="active" data-cursor-text="Browse">Browse</a>
+    <a href="/search.html" data-cursor-text="Search">Search</a>
+    <a href="/about.html" data-cursor-text="About">About</a>
+  </nav>
+  <a href="/admin" class="topbar-admin-link">Admin</a>
+</header>
+
+<main>
+  <section class="hero">
+    <span class="hero-tag">Academic research network</span>
+    <h1>Discover &amp; share <em>research</em></h1>
+    <p>Find publications, track citations, and connect with work in mathematics and related fields.</p>
+    <div class="hero-actions">
+      <a href="#papers" class="btn-primary magnet" data-cursor-text="Browse">Browse publications</a>
+      <a href="/admin" class="btn-outline magnet" data-cursor-text="Submit">Add publication</a>
+    </div>
+  </section>
+
+  <div class="filter-bar">
+    <span class="filter-label">Field:</span>
+    <button type="button" class="filter-btn active" data-field="math">Mathematics</button>
+    <button type="button" class="filter-btn" data-field="all">All fields</button>
+  </div>
+
+  <div class="content-wrap" id="papers">
+    <div>
+      <div id="featured-section"></div>
+      <div class="papers-grid" id="papers-grid"></div>
+      <div style="text-align:center;margin-top:32px">
+        <button type="button" class="btn-primary" id="load-more-btn">Load more papers</button>
+      </div>
+    </div>
+    <aside class="sidebar-right">
+      <div class="widget-card">
+        <div class="widget-head"><h3>Trending this week</h3></div>
+        <div class="widget-body" id="trending-widget"><p style="color:var(--muted)">Loading…</p></div>
+      </div>
+      <div class="widget-card">
+        <div class="widget-head"><h3>Popular topics</h3></div>
+        <div class="widget-body"><div class="tag-cloud" id="tag-cloud"></div></div>
+      </div>
+      <div class="widget-card">
+        <div class="widget-head"><h3>Stay updated</h3></div>
+        <div class="widget-body">
+          <p style="font-size:14px;color:var(--muted);margin-bottom:14px">Weekly digest of new publications.</p>
+          <div class="newsletter-form">
+            <input type="email" id="newsletter-email" placeholder="your@email.edu" autocomplete="email">
+            <button type="button" id="subscribe-btn">Subscribe</button>
+          </div>
+        </div>
+      </div>
+      <div class="widget-card">
+        <div class="widget-head"><h3>Repository stats</h3></div>
+        <div class="widget-body">
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--border)">
+            <span style="font-size:14px;color:var(--muted)">Total papers</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-weight:600" id="sidebar-total">&mdash;</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--border)">
+            <span style="font-size:14px;color:var(--muted)">Open access</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-weight:600;color:#27ae60" id="sidebar-open-pct">&mdash;</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0">
+            <span style="font-size:14px;color:var(--muted)">Avg citations</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--gold)" id="sidebar-avg-citations">&mdash;</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-brand">Universe<span style="color:var(--gold)">InTouch</span></div>
+  <p>Open-access academic paper repository &middot; <a href="https://github.com/p20210454-source/UniverseInTouch" target="_blank" rel="noopener">GitHub</a></p>
+  <p style="margin-top:8px;font-size:12px">CC BY 4.0 &mdash; Free to use with attribution</p>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="/site-common.js" defer></script>
+<script src="/custom-cursor.js" defer></script>
+<script src="/site.js" defer></script>
+</body>
+</html>

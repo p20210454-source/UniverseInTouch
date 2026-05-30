@@ -14,9 +14,19 @@ The server **will not start** until `ADMIN_PASSWORD` is set to a non-default val
 
 The server loads `.env` automatically on startup.
 
-Open [http://localhost:3000](http://localhost:3000)
+Open [http://localhost:3000](http://localhost:3000) — public **website** (separate pages, normal links)
 
-**Admin:** open the sidebar (⚙ Admin), sign in with username `admin` (or `ADMIN_USERNAME`) and your `ADMIN_PASSWORD`.
+| Page | URL |
+|------|-----|
+| Home | `/` |
+| Search | `/search.html` or `/search` |
+| About | `/about.html` or `/about` |
+| Paper | `/paper.html?id=1` |
+| Admin (manage papers) | `/admin` |
+
+**Custom cursor demo:** [http://localhost:3000/custom-cursor.html](http://localhost:3000/custom-cursor.html)
+
+**Admin:** [http://localhost:3000/admin](http://localhost:3000/admin) — dashboard only (public browsing is on `/`, `/search.html`, etc.). Sign in with username `admin` and your `ADMIN_PASSWORD`. Paper “View” opens the public `/paper.html?id=…` page.
 
 ## Security
 
@@ -49,3 +59,13 @@ Copy `.env.example` to `.env` and set `ADMIN_PASSWORD` and `SESSION_SECRET` befo
 | POST | `/api/subscribers` | — | Newsletter (rate limited) |
 
 Database: `database.sqlite` (not web-accessible).
+
+## Frontend layout
+
+| File | Role |
+|------|------|
+| `site-common.js` | Shared helpers (escape HTML, paper cards, DOI/Scholar links, toasts) |
+| `site.js` | Public pages only (`index`, `search`, `paper`) |
+| `app.js` | Admin panel only (`/admin`) |
+| `website.css` | Public + shared chrome (topbar, footer, paper view) |
+| `admin.css` | Admin sidebar, dashboard, forms |
