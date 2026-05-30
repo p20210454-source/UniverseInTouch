@@ -37,7 +37,7 @@ Open [http://localhost:3000](http://localhost:3000) — public **website** (sepa
 - View counts deduplicated per IP per paper (24h)
 - CSP: `script-src 'self'`; HSTS in production; CORS allowlist
 - Set `TRUST_PROXY=1` only behind a trusted reverse proxy
-- Static files from `public/` only; settings sanitized on save
+- Static files from `docs/` only; settings sanitized on save
 - HTML escaped in the UI; papers sanitized with DOMPurify on write
 
 Copy `.env.example` to `.env` and set `ADMIN_PASSWORD` and `SESSION_SECRET` before deploying.
@@ -62,28 +62,30 @@ Database: `database.sqlite` (not web-accessible).
 
 ## Frontend layout
 
-Static site lives under `public/`:
+Static site for GitHub Pages lives under `docs/` (deployed in page order):
 
 ```
-public/
-├── index.html          # 1. Home — browse papers, newsletter, stats
-├── search.html         # 2. Search — query publications
-├── about.html          # 3. About — project info
-├── paper.html          # 4. Paper — single publication view (?id=)
-├── admin.html          # 5. Admin — dashboard (requires login)
-├── custom-cursor.html  # 6. Demo — custom cursor showcase
-├── robots.txt
-├── assets/
-│   └── favicon.svg
+docs/
 ├── css/
 │   ├── website.css
 │   ├── admin.css
 │   ├── custom-cursor.css
 │   ├── custom-cursor-page.css
 │   └── theme-researchgate.css
-└── js/
-    ├── site-common.js  # Shared helpers (escape HTML, paper cards, toasts)
-    ├── site.js         # Public pages (index, search, paper)
-    ├── app.js          # Admin panel
-    └── custom-cursor.js
+├── js/
+│   ├── site-common.js
+│   ├── site.js
+│   ├── app.js
+│   └── custom-cursor.js
+├── index.html          # 1. Home
+├── search.html         # 2. Search
+├── about.html          # 3. About
+├── paper.html          # 4. Paper
+├── admin.html          # 5. Admin
+├── custom-cursor.html  # 6. Demo
+├── robots.txt
+└── assets/
+    └── favicon.svg
 ```
+
+GitHub Pages: Settings → Pages → source **GitHub Actions** (or folder `/docs` on `main`).

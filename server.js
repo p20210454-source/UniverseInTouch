@@ -53,7 +53,7 @@ assertSecureConfig();
 const app = express();
 const port = process.env.PORT || 3000;
 const db = openDatabase();
-const PUBLIC_DIR = path.join(__dirname, 'public');
+const PUBLIC_DIR = path.join(__dirname, 'docs');
 
 const ALLOWED_FIELDS = new Set(['math', 'all']);
 const ALLOWED_PAGE_IDS = new Set([
