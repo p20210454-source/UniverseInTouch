@@ -62,10 +62,28 @@ Database: `database.sqlite` (not web-accessible).
 
 ## Frontend layout
 
-| File | Role |
-|------|------|
-| `site-common.js` | Shared helpers (escape HTML, paper cards, DOI/Scholar links, toasts) |
-| `site.js` | Public pages only (`index`, `search`, `paper`) |
-| `app.js` | Admin panel only (`/admin`) |
-| `website.css` | Public + shared chrome (topbar, footer, paper view) |
-| `admin.css` | Admin sidebar, dashboard, forms |
+Static site lives under `public/`:
+
+```
+public/
+├── index.html          # 1. Home — browse papers, newsletter, stats
+├── search.html         # 2. Search — query publications
+├── about.html          # 3. About — project info
+├── paper.html          # 4. Paper — single publication view (?id=)
+├── admin.html          # 5. Admin — dashboard (requires login)
+├── custom-cursor.html  # 6. Demo — custom cursor showcase
+├── robots.txt
+├── assets/
+│   └── favicon.svg
+├── css/
+│   ├── website.css
+│   ├── admin.css
+│   ├── custom-cursor.css
+│   ├── custom-cursor-page.css
+│   └── theme-researchgate.css
+└── js/
+    ├── site-common.js  # Shared helpers (escape HTML, paper cards, toasts)
+    ├── site.js         # Public pages (index, search, paper)
+    ├── app.js          # Admin panel
+    └── custom-cursor.js
+```
