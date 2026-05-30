@@ -6,12 +6,11 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="UniverseInTouch admin — manage papers, categories, and site settings.">
 <meta name="theme-color" content="#1a1a2e">
-<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-<link rel="canonical" href="/admin">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <title>Admin — UniverseInTouch</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Crimson+Pro:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/website.css">
-<link rel="stylesheet" href="/css/admin.css">
+<link rel="stylesheet" href="css/website.css">
+<link rel="stylesheet" href="css/admin.css">
 </head>
 <body class="admin-site">
 
@@ -25,7 +24,7 @@
     <div class="sidebar-label">Navigation</div>
     <nav class="sidebar-nav" id="sidebar-nav">
       <a href="#" data-page="admin-page" class="sidebar-link active"><span class="icon" aria-hidden="true">D</span> Dashboard</a>
-      <a href="/" class="sidebar-link" target="_blank" rel="noopener"><span class="icon" aria-hidden="true">V</span> View Website</a>
+      <a href="index.html" class="sidebar-link" target="_blank" rel="noopener"><span class="icon" aria-hidden="true">V</span> View Website</a>
       <a href="#" data-page="add-paper" class="sidebar-link"><span class="icon" aria-hidden="true">+</span> Add Paper</a>
       <a href="#" data-page="manage" class="sidebar-link"><span class="icon" aria-hidden="true">M</span> Manage Papers</a>
       <a href="#" data-page="categories" class="sidebar-link"><span class="icon" aria-hidden="true">C</span> Categories</a>
@@ -48,11 +47,11 @@
 
 <header id="topbar" class="admin-topbar">
   <button type="button" class="admin-menu-btn" data-action="toggle-sidebar" aria-label="Open admin menu">Menu</button>
-  <a href="/" class="topbar-brand">Universe<span>InTouch</span></a>
+  <a href="index.html" class="topbar-brand">Universe<span>InTouch</span></a>
   <nav class="topbar-nav">
-    <a href="/">Browse</a>
-    <a href="/search.html">Search</a>
-    <a href="/about.html">About</a>
+    <a href="index.html">Browse</a>
+    <a href="search.html">Search</a>
+    <a href="about.html">About</a>
   </nav>
   <span class="topbar-admin-link topbar-admin-active" aria-current="page">Admin</span>
 </header>
@@ -67,7 +66,7 @@
         </div>
         <div class="admin-header-actions">
           <button type="button" class="submit-btn" data-action="show-page" data-page="add-paper">+ New Paper</button>
-          <a class="submit-btn secondary" href="/" style="text-decoration:none;display:inline-block">View Live Site</a>
+          <a class="submit-btn secondary" href="index.html" style="text-decoration:none;display:inline-block">View Live Site</a>
         </div>
       </div>
     </div>
@@ -430,11 +429,12 @@ var CC_LABEL_MAP = {
 
 <footer>
   <div class="footer-brand">Universe<span style="color:var(--gold)">InTouch</span></div>
-  <p>Open-access academic paper repository &middot; <a href="/">Public site</a> &middot; <a href="https://github.com/p20210454-source/UniverseInTouch" target="_blank" rel="noopener">GitHub</a></p>
+  <p>Open-access academic paper repository &middot; <a href="index.html">Public site</a> &middot; <a href="https://github.com/p20210454-source/UniverseInTouch" target="_blank" rel="noopener">GitHub</a></p>
   <p style="margin-top:8px;font-size:12px;">CC BY 4.0 &mdash; Free to use with attribution</p>
 </footer>
 
-<script src="/js/site-common.js" defer></script>
-<script src="/js/app.js" defer></script>
+<script src="js/site-paths.js"></script>
+<script src="js/site-common.js" defer></script>
+<script src="js/app.js" defer></script>
 </body>
 </html>

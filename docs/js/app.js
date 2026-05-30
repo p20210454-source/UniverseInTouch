@@ -29,7 +29,8 @@ async function apiFetch(url, options = {}) {
     if (csrfToken && ['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
       headers['X-CSRF-Token'] = csrfToken;
     }
-    const res = await fetch(url, {
+    const full = typeof apiUrl === 'function' ? apiUrl(url) : url;
+    const res = await fetch(full, {
       credentials: 'include',
       ...options,
       headers,
@@ -55,7 +56,7 @@ async function apiFetch(url, options = {}) {
 
 async function checkAuth() {
   try {
-    var res = await fetch('/api/auth/me', { credentials: 'include' });
+    var res = await fetch(apiUrl('/api/auth/me'), { credentials: 'include' });
     var data = await res.json();
     isAdmin = !!data.authenticated;
     csrfToken = data.csrfToken || null;
@@ -97,7 +98,7 @@ async function adminLogin() {
     UIT.showToast('Enter username and password');
     return false;
   }
-  var res = await fetch('/api/auth/login', {
+  var res = await fetch(apiUrl('/api/auth/login'), {
     method: 'POST',
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
@@ -293,7 +294,7 @@ async function refreshAdminData(forceRender) {
 }
 
 function browsePapers() {
-  window.location.href = '/';
+  window.location.href = typeof siteUrl === 'function' ? siteUrl('index.html') : '/';
 }
 
 

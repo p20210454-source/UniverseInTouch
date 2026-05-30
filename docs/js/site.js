@@ -11,14 +11,15 @@ var UIT = window.UIT;
 
 async function apiGet(url) {
   try {
-    var res = await fetch(url, { credentials: 'include' });
+    var full = typeof apiUrl === 'function' ? apiUrl(url) : url;
+    var res = await fetch(full, { credentials: 'include' });
     if (!res.ok) {
       var err = await res.json().catch(function () { return {}; });
       throw new Error(err.error || 'Request failed');
     }
     return await res.json();
   } catch (e) {
-    UIT.showToast(e.message);
+    if (!window.IS_STATIC_PAGES) UIT.showToast(e.message);
     return null;
   }
 }
@@ -114,8 +115,8 @@ async function renderTags() {
     .slice(0, 18)
     .map(function (t) {
       return (
-        '<a class="tag-pill" href="/search.html?q=' +
-        encodeURIComponent(t.name) +
+        '<a class="tag-pill" href="' +
+        UIT.siteHref('search.html?q=' + encodeURIComponent(t.name)) +
         '">' +
         UIT.escapeHTML(t.name) +
         ' <span style="color:var(--accent)">' +
@@ -136,6 +137,20 @@ function applyStatsToUI() {
   set('sidebar-open-pct', (siteStats.openAccessPercent || 0) + '%');
   set('sidebar-peer-pct', (siteStats.peerReviewedPercent || 0) + '%');
   set('sidebar-avg-citations', siteStats.avgCitations || '0');
+}
+
+function showStaticPagesNotice() {
+  if (!window.IS_STATIC_PAGES) return;
+  var tw = document.getElementById('trending-widget');
+  if (tw) {
+    tw.innerHTML =
+      '<p style="color:var(--muted);font-size:14px">Papers load from the API. On GitHub Pages only the design is hosted — run <code>npm start</code> locally or deploy the Node app for live data.</p>';
+  }
+  var grid = document.getElementById('papers-grid');
+  if (grid && !grid.innerHTML.trim()) {
+    grid.innerHTML =
+      '<p style="color:var(--muted);padding:24px">No papers on static hosting. Use <a href="https://github.com/p20210454-source/UniverseInTouch">the repo</a> with <code>npm start</code> for the full site.</p>';
+  }
 }
 
 async function loadHome() {
@@ -160,6 +175,7 @@ async function loadHome() {
   renderPapers();
   await renderTrending();
   await renderTags();
+  showStaticPagesNotice();
 }
 
 async function filterPapers(field, btn) {
@@ -188,7 +204,7 @@ async function subscribeNewsletter() {
     return;
   }
   try {
-    var res = await fetch('/api/subscribers', {
+    var res = await fetch(apiUrl('/api/subscribers'), {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
@@ -216,7 +232,7 @@ async function loadPaperPage() {
     return;
   }
   currentPaperView = p;
-  await fetch('/api/papers/' + id + '/view', { method: 'POST', credentials: 'include' });
+  await fetch(apiUrl('/api/papers/' + id + '/view'), { method: 'POST', credentials: 'include' });
   el.innerHTML = UIT.renderPaperDetailHtml(p);
   document.title = (p.title || 'Paper') + ' — UniverseInTouch';
   var copyBtn = document.getElementById('copy-cite-btn');
@@ -254,7 +270,7 @@ async function performSearch(query) {
     ? results.map(function (p) { return UIT.paperCardHTML(p); }).join('')
     : '<p style="color:var(--muted);padding:32px 0">No papers found for “' + UIT.escapeHTML(q) + '”.</p>';
   if (window.history && window.history.replaceState) {
-    window.history.replaceState(null, '', '/search.html?q=' + encodeURIComponent(q));
+    window.history.replaceState(null, '', siteUrl('search.html?q=' + encodeURIComponent(q)));
   }
 }
 

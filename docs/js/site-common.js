@@ -54,7 +54,12 @@
   }
 
   function paperUrl(id) {
-    return '/paper.html?id=' + encodeURIComponent(id);
+    var rel = 'paper.html?id=' + encodeURIComponent(id);
+    return typeof global.siteUrl === 'function' ? global.siteUrl(rel) : '/' + rel;
+  }
+
+  function siteHref(rel) {
+    return typeof global.siteUrl === 'function' ? global.siteUrl(rel) : '/' + String(rel || '').replace(/^\//, '');
   }
 
   function showToast(msg, toastId) {
@@ -287,8 +292,8 @@
           p.tags
             .map(function (t) {
               return (
-                '<a class="tag-pill" href="/search.html?q=' +
-                encodeURIComponent(t) +
+                '<a class="tag-pill" href="' +
+                siteHref('search.html?q=' + encodeURIComponent(t)) +
                 '">' +
                 escapeHTML(t) +
                 '</a>'
@@ -298,7 +303,7 @@
           '</div>'
         : '';
     return (
-      '<a href="/" class="back-btn">&larr; Back to papers</a>' +
+      '<a href="' + siteHref('index.html') + '" class="back-btn">&larr; Back to papers</a>' +
       '<div class="paper-meta" style="margin-bottom:16px">' +
       '<span class="paper-field ' +
       fieldClass(p.field) +
@@ -383,6 +388,7 @@
     fieldName: fieldName,
     formatDate: formatDate,
     paperUrl: paperUrl,
+    siteHref: siteHref,
     showToast: showToast,
     renderDoiHtml: renderDoiHtml,
     paperExternalLinksHtml: paperExternalLinksHtml,
